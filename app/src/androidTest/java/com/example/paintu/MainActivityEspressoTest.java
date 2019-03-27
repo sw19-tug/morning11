@@ -20,13 +20,13 @@ public class MainActivityEspressoTest {
 
     @Test
     public void testButtonVisible() {
-        onView(R.id.bt_tools_chooser).check(matches(isDisplayed()));
+        onView(withId(R.id.bt_tools_chooser)).check(matches(isDisplayed()));
     }
 
     @Test
     public void bottomSheetVisible() {
-        onView(withId(R.id.bt_tool_chooser).perform(click()));
+        onView(withId(R.id.bt_tools_chooser)).perform(click());
 
-        onView(R.id.bottom_sheet).check(matches(isDisplayed()));
+        onView(withId(R.id.bottom_sheet)).check(matches(isDisplayed()));
     }
 }
