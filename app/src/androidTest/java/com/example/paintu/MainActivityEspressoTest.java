@@ -56,6 +56,7 @@ public class MainActivityEspressoTest {
 
     @Test
     public void testPointButton() {
+        onView(withId(R.id.bt_tools_chooser)).perform(click());
         onView(withId(R.id.tool_point)).perform(click());
         try {
             onView(withId(R.id.drawing_view)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
@@ -68,6 +69,7 @@ public class MainActivityEspressoTest {
 
     @Test
     public void testLineButton() {
+        onView(withId(R.id.bt_tools_chooser)).perform(click());
         onView(withId(R.id.tool_line)).perform(click());
         try {
             onView(withId(R.id.drawing_view)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
@@ -79,8 +81,8 @@ public class MainActivityEspressoTest {
 
     }
 
-    @Test
     public void testPathButton() {
+        onView(withId(R.id.bt_tools_chooser)).perform(click());
         onView(withId(R.id.tool_path)).perform(click());
         try {
             onView(withId(R.id.drawing_view)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
