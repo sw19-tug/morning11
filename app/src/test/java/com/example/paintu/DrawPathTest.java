@@ -75,16 +75,15 @@ public class DrawPathTest {
         when(e004.getY()).thenReturn(13);
         testClass2.draw(e004);
 
-
         //verify(testClass2).draw(mockedMotionEvent);
         verify(testClass2).draw(e001);
-        verify(testClass2, never()).drawPath(mockedPath, mockedPaint);
+        verify(mockedCanvas, never()).drawPath(mockedPath, mockedPaint);
 
         verify(testClass2).draw(e002);
-        verify(testClass2, never()).drawPath(mockedPath, mockedPaint);
+        verify(mockedCanvas, never()).drawPath(mockedPath, mockedPaint);
 
         verify(testClass2).draw(e003);
-        verify(testClass2, never()).drawPath(mockedPath, mockedPaint);
+        verify(mockedCanvas, never()).drawPath(mockedPath, mockedPaint);
 
         verify(testClass2).draw(e004);
         verify(mockedCanvas).drawPath(mockedPath, mockedPaint);
