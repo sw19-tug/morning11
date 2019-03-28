@@ -93,5 +93,16 @@ public class MainActivityEspressoTest {
 
     }
 
+    public void testDrawPointExists() {
+        assertNotNull(mainActivityTestRule.getActivity().drawingView.drawPoint);
+    }
+
+    public void testDrawLineExists() {
+        assertNotNull(mainActivityTestRule.getActivity().drawingView.drawLine);
+    }
+
+    public void testDrawPathExists() {
+        assertNotNull(mainActivityTestRule.getActivity().drawingView.drawPath);
+    }
 
 }
