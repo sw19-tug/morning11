@@ -21,12 +21,19 @@ public class DrawPath {
     public boolean draw(MotionEvent event)
     {
         int action = event.getAction();
+        float touchX = event.getX();
+        float touchY = event.getY();
 
-        path = new Path();
+        if(path == null)
+            path = new Path();
 
         switch (action){
             case MotionEvent.ACTION_DOWN:
-                path.moveTo(event.getX(), event.getY());
+                path.moveTo(touchX, touchY);
+                path.lineTo(touchX, touchY);
+                break;
+            case MotionEvent.ACTION_UP:
+                path.lineTo(touchX, touchY);
                 canvas.drawPath(path, paint);
                 break;
             default:
