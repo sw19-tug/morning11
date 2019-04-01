@@ -1,6 +1,5 @@
 package com.example.paintu;
 
-import static org.mockito.Mockito.*;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -8,84 +7,67 @@ import android.view.MotionEvent;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;//@RunWith(MockitoJUnitRunner.class)
 
 public class DrawPathTest {
-
-    // canvas object
-    Canvas mockedCanvas;
-    Path mockedPath;
-    Paint mockedPaint;
-    MotionEvent mockedMotionEvent;
-
-    // convert canvas into bitmap try
+    private static int TEST_COLOR = 500;
+    Paint paint = mock(Paint.class);
+    Canvas canvas = mock(Canvas.class);
+    MotionEvent mockEvent = mock(MotionEvent.class);
+    ArgumentCaptor<Path> pathArg = ArgumentCaptor.forClass(Path.class);
+    ArgumentCaptor<Paint> paintArg = ArgumentCaptor.forClass(Paint.class);
 
     @Before
     public void setUp() throws Exception {
-        mockedCanvas = mock(Canvas.class);
-        mockedPaint = mock(Paint.class);
-        mockedPath = mock(Path.class);
-        mockedMotionEvent = mock(MotionEvent.class);
-    }
-
-
-    @Test
-    public void testGetColor()
-    {
-        // Init / Arange
-        DrawPath testClass1 = new DrawPath(mockedCanvas, mockedPaint);
-
-        // Act
-        when(testClass1.getColor()).thenReturn(123);
-
-        // Verify / Assert
-        assertEquals(123, testClass1.getColor());
+        Mockito.reset(paint);
+        Mockito.reset(canvas);
+        Mockito.reset(mockEvent);
+        when(paint.getColor()).thenReturn(TEST_COLOR);
     }
 
     @Test
-    public void testDraw()
-    {
-        DrawPath testClass2 = new DrawPath(mockedCanvas, mockedPaint);
-
-        // event 001
-        MotionEvent e001 = mock(MotionEvent.class);
-        when(e001.getAction()).thenReturn(MotionEvent.ACTION_DOWN);
-        when(e001.getX()).thenReturn(10);
-        when(e001.getY()).thenReturn(10);
-        testClass2.draw(e001);
-
-        // event 002
-        MotionEvent e002 = mock(MotionEvent.class);
-        when(e002.getAction()).thenReturn(MotionEvent.ACTION_MOVE);
-        when(e002.getX()).thenReturn(11);
-        when(e002.getY()).thenReturn(11);
-        testClass2.draw(e002);
-
-        // event 003
-        MotionEvent e003 = mock(MotionEvent.class);
-        when(e003.getAction()).thenReturn(MotionEvent.ACTION_MOVE);
-        when(e003.getX()).thenReturn(12);
-        when(e003.getY()).thenReturn(12);
-        testClass2.draw(e003);
-
-        // event 004
-        MotionEvent e004 = mock(MotionEvent.class);
-        when(e004.getAction()).thenReturn(MotionEvent.ACTION_UP);
-        when(e004.getX()).thenReturn(13);
-        when(e004.getY()).thenReturn(13);
-        testClass2.draw(e004);
-
-        //verify(testClass2).draw(mockedMotionEvent);
-        verify(testClass2).draw(e001);
-        verify(mockedCanvas, never()).drawPath(mockedPath, mockedPaint);
-
-        verify(testClass2).draw(e002);
-        verify(mockedCanvas, never()).drawPath(mockedPath, mockedPaint);
-
-        verify(testClass2).draw(e003);
-        verify(mockedCanvas, never()).drawPath(mockedPath, mockedPaint);
-
-        verify(testClass2).draw(e004);
-        verify(mockedCanvas).drawPath(mockedPath, mockedPaint);
+    public void testDraw() {
+        DrawPath drawPathClass = new DrawPath(canvas, paint);        // TEST ACTION_DOWN
+        float xy = 10.f;
+        when(mockEvent.getAction()).thenReturn(MotionEvent.ACTION_DOWN);
+        when(mockEvent.getX()).thenReturn(xy);
+        when(mockEvent.getY()).thenReturn(xy);
+        drawPathClass.draw(mockEvent);
+        verify(canvas, never()).drawPath(any(Path.class), any(Paint.class));        // TEST ACTION_MOVE 1
+        xy = 11.f;
+        when(mockEvent.getAction()).thenReturn(MotionEvent.ACTION_MOVE);
+        when(mockEvent.getX()).thenReturn(xy);
+        when(mockEvent.getY()).thenReturn(xy);
+        drawPathClass.draw(mockEvent);        // TEST ACTION_MOVE 2
+        xy = 12.f;
+        when(mockEvent.getAction()).thenReturn(MotionEvent.ACTION_MOVE);
+        when(mockEvent.getX()).thenReturn(xy);
+        when(mockEvent.getY()).thenReturn(xy);
+        drawPathClass.draw(mockEvent);        // TEST ACTION_UP
+        xy = 13.f;
+        when(mockEvent.getAction()).thenReturn(MotionEvent.ACTION_UP);
+        when(mockEvent.getX()).thenReturn(xy);
+        when(mockEvent.getY()).thenReturn(xy);
+        drawPathClass.draw(mockEvent);        // this should fire 3 times
+        verify(canvas, times(3)).drawPath(pathArg.capture(), paintArg.capture());        // get all catched arguments
+        List<Path> capturedPaths = pathArg.getAllValues();
+        List<Paint> capturedPaints = paintArg.getAllValues();        // test if color is the same
+        //assertEquals("John", capturedPaths.get(0)...);
+        assertEquals(TEST_COLOR, capturedPaints.get(0).getColor());
+        assertEquals(TEST_COLOR, capturedPaints.get(1).getColor());
+        assertEquals(TEST_COLOR, capturedPaints.get(2).getColor());
     }
 }
