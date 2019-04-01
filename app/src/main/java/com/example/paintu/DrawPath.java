@@ -2,30 +2,38 @@ package com.example.paintu;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.view.MotionEvent;
 
 public class DrawPath {
 
-    private Paint drawPaint = null;
-    private Canvas drawCanvas = null;
-
-    private int paintColor = 0xFFFFFF00;
-
+    private Paint paint = null;
+    private Canvas canvas = null;
+    private Path path = null;
+    private MotionEvent motionEvent = null;
 
     public DrawPath(Canvas canvas, Paint paint)
     {
-        this.drawCanvas = canvas;
-        this.drawPaint = paint;
+        this.canvas = canvas;
+        this.paint = paint;
     }
 
-    public void setColor(int color)
+    public boolean draw(MotionEvent event)
     {
-        this.paintColor = color;
-    }
+        int action = event.getAction();
 
-    public int getColor()
-    {
-        return this.paintColor;
-    }
+        path = new Path();
 
+        switch (action){
+            case MotionEvent.ACTION_DOWN:
+                path.moveTo(event.getX(), event.getY());
+                canvas.drawPath(path, paint);
+                break;
+            default:
+                break;
+        }
+        return false;
+
+    }
 
 }
