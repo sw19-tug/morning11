@@ -32,11 +32,17 @@ public class DrawPath {
                 path.moveTo(touchX, touchY);
                 path.lineTo(touchX, touchY);
                 break;
-            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_MOVE:
                 path.lineTo(touchX, touchY);
                 canvas.drawPath(path, paint);
                 break;
+            case MotionEvent.ACTION_UP:
+                path.lineTo(touchX, touchY);
+                canvas.drawPath(path, paint);
+                path.reset();
+                break;
             default:
+                path.reset();
                 break;
         }
         return false;
