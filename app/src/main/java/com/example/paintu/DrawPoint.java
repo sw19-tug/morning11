@@ -5,14 +5,11 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.graphics.Canvas;
-
-
 import android.view.MotionEvent;
 
 public class DrawPoint{
 
     private Paint paint;
-
     private Canvas canvas;
 
     public DrawPoint(Canvas canvas, Paint paint) {
@@ -21,7 +18,6 @@ public class DrawPoint{
     }
 
     public boolean drawPoint(MotionEvent event){
-
 
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStyle(Paint.Style.STROKE);
@@ -33,14 +29,9 @@ public class DrawPoint{
                 return true;
             case MotionEvent.ACTION_UP:
                 break;
-
             default:
-                return true;
-
+                break;
         }
-
-    return true;
+        return false;
     }
-
-
 }
