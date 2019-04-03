@@ -9,7 +9,7 @@ public class DrawPath {
 
     private Paint paint = null;
     private Canvas canvas = null;
-    private Path path = new Path();
+    private Path path = null;
     private MotionEvent motionEvent = null;
     private float lastX;
     private float lastY;
@@ -23,6 +23,9 @@ public class DrawPath {
     public boolean draw(MotionEvent event)
     {
 
+        if(path == null)
+            path = new Path();
+
         if(event == null)
             return false;
 
@@ -35,9 +38,6 @@ public class DrawPath {
 
         switch (action){
             case MotionEvent.ACTION_DOWN:
-                if(path != null)
-                    path = new Path();
-
                 path.reset();
 
                 lastX = touchX;
@@ -47,9 +47,6 @@ public class DrawPath {
                 path.lineTo(touchX, touchY);
                 break;
             case MotionEvent.ACTION_MOVE:
-                if(path == null)
-                    break;
-
                 path.reset();
 
                 path.moveTo(lastX, lastY);
@@ -58,18 +55,13 @@ public class DrawPath {
 
                 lastX = touchX;
                 lastY = touchY;
-
                 break;
             case MotionEvent.ACTION_UP:
-                if(path == null)
-                    break;
-
                 path.reset();
 
                 path.moveTo(lastX, lastY);
                 path.lineTo(touchX, touchY);
                 canvas.drawPath(path, paint);
-
                 break;
             default:
                 // TODO: maybe do nothing, check for other events
