@@ -53,6 +53,6 @@ public class DrawLineTest {
         when(mockMotion.getAction()).thenReturn(MotionEvent.ACTION_UP);
         when(mockMotion.getX()).thenReturn(16f);
         when(mockMotion.getY()).thenReturn(24f);
-        verify(mockCanvas).draw(10, 34, 16, 34, mockPaint);
+        verify(mockCanvas).drawLine(10, 34, 16, 34, mockPaint);
     }
 }
