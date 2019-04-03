@@ -29,6 +29,7 @@ public class DrawPathTest {
     MotionEvent mockEvent = mock(MotionEvent.class);
     ArgumentCaptor<Path> pathArg = ArgumentCaptor.forClass(Path.class);
     ArgumentCaptor<Paint> paintArg = ArgumentCaptor.forClass(Paint.class);
+    DrawPath mockedDrawPath = mock(DrawPath.class);
 
     @Before
     public void setUp() throws Exception {
@@ -61,13 +62,13 @@ public class DrawPathTest {
         when(mockEvent.getAction()).thenReturn(MotionEvent.ACTION_UP);
         when(mockEvent.getX()).thenReturn(xy);
         when(mockEvent.getY()).thenReturn(xy);
-        drawPathClass.draw(mockEvent);        // this should fire 3 times
-        verify(canvas, times(3)).drawPath(pathArg.capture(), paintArg.capture());        // get all catched arguments
+        drawPathClass.draw(mockEvent);        // this should fire 2 times
+        verify(canvas, times(2)).drawPath(pathArg.capture(), paintArg.capture());        // get all catched arguments
         List<Path> capturedPaths = pathArg.getAllValues();
         List<Paint> capturedPaints = paintArg.getAllValues();        // test if color is the same
         //assertEquals("John", capturedPaths.get(0)...);
         assertEquals(TEST_COLOR, capturedPaints.get(0).getColor());
         assertEquals(TEST_COLOR, capturedPaints.get(1).getColor());
-        assertEquals(TEST_COLOR, capturedPaints.get(2).getColor());
+        //assertEquals(TEST_COLOR, capturedPaints.get(2).getColor());
     }
 }
