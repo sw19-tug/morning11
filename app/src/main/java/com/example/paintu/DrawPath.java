@@ -11,6 +11,8 @@ public class DrawPath {
     private Canvas canvas = null;
     private Path path = new Path();
     private MotionEvent motionEvent = null;
+    private float lastX;
+    private float lastY;
 
     public DrawPath(Canvas canvas, Paint paint)
     {
@@ -38,6 +40,9 @@ public class DrawPath {
 
                 path.reset();
 
+                lastX = touchX;
+                lastY = touchY;
+
                 path.moveTo(touchX, touchY);
                 path.lineTo(touchX, touchY);
                 break;
@@ -45,19 +50,30 @@ public class DrawPath {
                 if(path == null)
                     break;
 
+                path.reset();
+
+                path.moveTo(lastX, lastY);
                 path.lineTo(touchX, touchY);
                 canvas.drawPath(path, paint);
+
+                lastX = touchX;
+                lastY = touchY;
+
                 break;
             case MotionEvent.ACTION_UP:
                 if(path == null)
                     break;
 
+                path.reset();
+
+                path.moveTo(lastX, lastY);
                 path.lineTo(touchX, touchY);
                 canvas.drawPath(path, paint);
-                path.reset();
+
                 break;
             default:
-                path.reset();
+                // TODO: maybe do nothing, check for other events
+                //path.reset();
                 break;
         }
         return false;
