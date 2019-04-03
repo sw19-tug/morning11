@@ -1,6 +1,5 @@
 package com.example.paintu;
 
-import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -11,7 +10,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.service.autofill.Validators.not;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -93,6 +91,9 @@ public class MainActivityEspressoTest {
 
     }
 
+    /*
+    MOVE TO SUB-BRANCH
+
     public void testDrawPointExists() {
         assertNotNull(mainActivityTestRule.getActivity().drawingView.drawPoint);
     }
@@ -103,6 +104,6 @@ public class MainActivityEspressoTest {
 
     public void testDrawPathExists() {
         assertNotNull(mainActivityTestRule.getActivity().drawingView.drawPath);
-    }
+    }*/
 
 }
