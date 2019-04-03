@@ -36,15 +36,14 @@ public class DrawPath {
         float touchX = event.getX();
         float touchY = event.getY();
 
+        boolean returnval = false;
+
         switch (action){
             case MotionEvent.ACTION_DOWN:
-                path.reset();
-
+                // record xy
                 lastX = touchX;
                 lastY = touchY;
-
-                path.moveTo(touchX, touchY);
-                path.lineTo(touchX, touchY);
+                returnval = true;
                 break;
             case MotionEvent.ACTION_MOVE:
                 path.reset();
@@ -55,19 +54,18 @@ public class DrawPath {
 
                 lastX = touchX;
                 lastY = touchY;
+                returnval = true;
                 break;
             case MotionEvent.ACTION_UP:
-                path.reset();
-
-                path.moveTo(lastX, lastY);
-                path.lineTo(touchX, touchY);
-                canvas.drawPath(path, paint);
+                returnval = true;
                 break;
             default:
-                // TODO: maybe do nothing, check for other events
-                //path.reset();
+                returnval = false;
                 break;
         }
+        if(returnval)
+            return true;
+
         return false;
 
     }
