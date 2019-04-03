@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">paintu</string>
+    <string name="tool">Tool</string>
+    <string name="tool_point">Point</string>
+    <string name="tool_line">Line</string>
+    <string name="tool_path">Path</string>
+    <string name="tool_fill">Fill</string>
+    <string name="tool_eraser">Eraser</string>
+    <string name="tool_circle">Circle</string>
+    <string name="tool_rectangle">Rectangle</string>
 </resources>
