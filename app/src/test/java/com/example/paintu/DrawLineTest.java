@@ -8,7 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class DrawLineTest {
 
@@ -25,13 +27,32 @@ public class DrawLineTest {
 
 
     @Test
-    public void testDrawLine(){
-        DrawLine drawLineClass = new DrawLine(mockCanvas, mockPaint);
-
-        boolean result = drawLineClass.drawLine(mockMotion);
-
-        assertTrue(result);
-
+    public void testActionDown(){
+        when(mockMotion.getAction()).thenReturn(MotionEvent.ACTION_DOWN);
+        when(mockMotion.getX()).thenReturn(10f);
+        when(mockMotion.getY()).thenReturn(34f);
+        DrawLine drawLine = new DrawLine (mockCanvas, mockPaint);
+        DrawLine.Line line = drawLine.draw(mockMotion);
+        assertEquals(line.getEndX(), -1);
+        assertEquals(line.getEndY(), -1);
     }
 
+    @Test
+    public void testActionMove(){
+        when(mockMotion.getAction()).thenReturn(MotionEvent.ACTION_MOVE);
+        when(mockMotion.getX()).thenReturn(16f);
+        when(mockMotion.getY()).thenReturn(24f);
+        DrawLine drawLine = new DrawLine (mockCanvas, mockPaint);
+        DrawLine.Line line = drawLine.draw(mockMotion);
+        assertEquals(line.getEndX(), 16);
+        assertEquals(line.getEndY(), 34);
+    }
+
+    @Test
+    public void testActionUp(){
+        when(mockMotion.getAction()).thenReturn(MotionEvent.ACTION_UP);
+        when(mockMotion.getX()).thenReturn(16f);
+        when(mockMotion.getY()).thenReturn(24f);
+        verify(mockCanvas).draw(10, 34, 16, 34, mockPaint);
+    }
 }
