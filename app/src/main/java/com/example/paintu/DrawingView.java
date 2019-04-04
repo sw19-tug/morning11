@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -15,10 +16,14 @@ public class DrawingView extends View {
     public static final int TOOL_PATH = 3;
 
     private Paint drawPaint, canvasPaint;
-    private int paintColor;
+    private int paintColor = 0xFF000000;
     Canvas canvas;
     Bitmap bitmap;
     int tool = TOOL_POINT;
+    DrawPoint drawPoint;
+    DrawLine drawLine;
+    DrawPath drawPath;
+    DrawLine.Line line;
 
     public DrawingView(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -30,17 +35,33 @@ public class DrawingView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
+        drawPoint = new DrawPoint(canvas, drawPaint);
+        drawLine = new DrawLine(canvas, drawPaint);
+        drawPath = new DrawPath(canvas, drawPaint);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawBitmap(bitmap, 0, 0, canvasPaint);
+        if(line != null && line.getEndX() >= 0 && line.getEndY() >= 0) {
+            canvas.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(),
+                    drawPaint);
+            Log.d("StartX", line.getStartX() + "");
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
+        if(tool == TOOL_POINT)
+            drawPoint.drawPoint(event);
+        else if(tool == TOOL_LINE)
+            line = drawLine.draw(event);
+        else if(tool == TOOL_PATH)
+            drawPath.draw(event);
+        Log.d("Event", event.getAction() + ": " + event.getX() + ", " + event.getY());
+        this.invalidate();
+        return true;
     }
 
     private void setupDrawing() {

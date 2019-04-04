@@ -91,8 +91,6 @@ public class MainActivityEspressoTest {
 
     }
 
-    /*
-    MOVE TO SUB-BRANCH
 
     public void testDrawPointExists() {
         assertNotNull(mainActivityTestRule.getActivity().drawingView.drawPoint);
@@ -104,6 +102,6 @@ public class MainActivityEspressoTest {
 
     public void testDrawPathExists() {
         assertNotNull(mainActivityTestRule.getActivity().drawingView.drawPath);
-    }*/
+    }
 
 }
