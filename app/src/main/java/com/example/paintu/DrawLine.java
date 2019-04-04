@@ -8,11 +8,12 @@ public class DrawLine {
 
     private Canvas canvas;
     private Paint paint;
-    private Line line = new Line();
+    private Line line;
 
     public DrawLine(Canvas canvas, Paint paint) {
         this.canvas = canvas;
         this.paint = paint;
+        this.line = new Line();
     }
 
     public Line draw(MotionEvent event) {
