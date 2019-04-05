@@ -30,7 +30,7 @@ public class EraserTest {
     ArgumentCaptor<Path> pathArg = ArgumentCaptor.forClass(Path.class);
     ArgumentCaptor<Paint> paintArg = ArgumentCaptor.forClass(Paint.class);
     Eraser mockedEraser = mock(Eraser.class);
-    int mockedBackgroundColor = mock(int.class);
+    int mockedBackgroundColor = 0xFFFFFFFF;
 
     @Before
     public void setUp() throws Exception {
