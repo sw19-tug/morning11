@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -14,9 +13,11 @@ public class DrawingView extends View {
     public static final int TOOL_POINT = 1;
     public static final int TOOL_LINE = 2;
     public static final int TOOL_PATH = 3;
+    public static final int TOOL_ERASER = 5;
 
-    private Paint drawPaint, canvasPaint;
+    private Paint drawPaint, canvasPaint, eraserPaint;
     private int paintColor = 0xFF000000;
+    private int backgroundColor = 0xFFFFFFFF;
     Canvas canvas;
     Bitmap bitmap;
     int tool = TOOL_POINT;
@@ -24,6 +25,7 @@ public class DrawingView extends View {
     DrawLine drawLine;
     DrawPath drawPath;
     DrawLine.Line line;
+    Eraser eraser;
 
     public DrawingView(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -38,6 +40,7 @@ public class DrawingView extends View {
         drawPoint = new DrawPoint(canvas, drawPaint);
         drawLine = new DrawLine(canvas, drawPaint);
         drawPath = new DrawPath(canvas, drawPaint);
+        eraser = new Eraser(canvas, eraserPaint, backgroundColor);
     }
 
     @Override
@@ -47,7 +50,6 @@ public class DrawingView extends View {
         if(line != null && line.getEndX() >= 0 && line.getEndY() >= 0) {
             canvas.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(),
                     drawPaint);
-            Log.d("StartX", line.getStartX() + "");
         }
     }
 
@@ -59,7 +61,8 @@ public class DrawingView extends View {
             line = drawLine.draw(event);
         else if(tool == TOOL_PATH)
             drawPath.draw(event);
-        Log.d("Event", event.getAction() + ": " + event.getX() + ", " + event.getY());
+        else if(tool == TOOL_ERASER)
+            eraser.draw(event);
         this.invalidate();
         return true;
     }
@@ -72,6 +75,16 @@ public class DrawingView extends View {
         drawPaint.setStyle(Paint.Style.STROKE);
         drawPaint.setStrokeJoin(Paint.Join.ROUND);
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
+
+        eraserPaint = new Paint();
+        eraserPaint.setColor(backgroundColor);
+        eraserPaint.setAntiAlias(true);
+        eraserPaint.setStrokeWidth(40);
+        eraserPaint.setStyle(Paint.Style.STROKE);
+        eraserPaint.setStrokeJoin(Paint.Join.ROUND);
+        eraserPaint.setStrokeCap(Paint.Cap.ROUND);
+
+
         canvasPaint = new Paint(Paint.DITHER_FLAG);
     }
 
