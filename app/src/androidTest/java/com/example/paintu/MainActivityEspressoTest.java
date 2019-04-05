@@ -91,6 +91,18 @@ public class MainActivityEspressoTest {
 
     }
 
+    public void testEraserButton() {
+        onView(withId(R.id.bt_tools_chooser)).perform(click());
+        onView(withId(R.id.tool_eraser)).perform(click());
+        try {
+            onView(withId(R.id.drawing_view)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        } catch (AssertionFailedError e) {
+            // View not displayed
+            assertEquals(mainActivityTestRule.getActivity().drawingView.tool, 5);
+        }
+
+    }
+
 
     public void testDrawPointExists() {
         assertNotNull(mainActivityTestRule.getActivity().drawingView.drawPoint);
@@ -102,6 +114,10 @@ public class MainActivityEspressoTest {
 
     public void testDrawPathExists() {
         assertNotNull(mainActivityTestRule.getActivity().drawingView.drawPath);
+    }
+
+    public void testEraserExists() {
+        assertNotNull(mainActivityTestRule.getActivity().drawingView.eraser);
     }
 
 }

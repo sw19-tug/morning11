@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout toolPointLayout;
     LinearLayout toolLineLayout;
     LinearLayout toolPathLayout;
+    LinearLayout toolEraserLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         toolPointLayout = (LinearLayout) findViewById(R.id.tool_point);
         toolLineLayout = (LinearLayout) findViewById(R.id.tool_line);
         toolPathLayout = (LinearLayout) findViewById(R.id.tool_path);
+        toolEraserLayout = (LinearLayout) findViewById(R.id.tool_eraser);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -60,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        toolEraserLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawingView.setTool(DrawingView.TOOL_ERASER);
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
     }
 
 
