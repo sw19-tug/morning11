@@ -104,4 +104,12 @@ public class DrawingView extends View {
     public void setTool(int tool) {
         this.tool = tool;
     }
+
+    public Paint getDrawPaint() {
+        return drawPaint;
+    }
+
+    public void setDrawPaint(Paint drawPaint) {
+        this.drawPaint = drawPaint;
+    }
 }
