@@ -3,4 +3,15 @@
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#DCDCDC</color>
     <color name="colorAccent">#000000</color>
+
+    <color name="option_color_white">@android:color/white</color>
+    <color name="option_color_black">@android:color/black</color>
+    <color name="option_color_red">#FFFF0000</color>
+    <color name="option_color_green">#FF00FF00</color>
+    <color name="option_color_blue">#FF3366FF</color>
+    <color name="option_color_yellow">#FFFFFF00</color>
+    <color name="option_color_orange">#FFFF7700</color>
+    <color name="option_color_purple">#FFFF00FF</color>
+
+
 </resources>
