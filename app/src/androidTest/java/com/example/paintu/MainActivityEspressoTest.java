@@ -1,11 +1,16 @@
 package com.example.paintu;
 
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
+import android.widget.SeekBar;
 
 import junit.framework.AssertionFailedError;
 
+import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +21,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -130,6 +136,37 @@ public class MainActivityEspressoTest {
         onView(withId(R.id.color_blue)).perform(click());
         assertEquals(mainActivityTestRule.getActivity().drawingView.getPaintColor(), mainActivityTestRule.getActivity().getResources().getColor(R.color.option_color_blue));
         assertEquals(mainActivityTestRule.getActivity().drawingView.getDrawPaint().getColor(), mainActivityTestRule.getActivity().getResources().getColor(R.color.option_color_blue));
+    }
+
+    @Test
+    public void testSliderVisible() {
+        onView(withId(R.id.stroke)).check(matches(withText("10")));
+        onView(withId(R.id.stroke_options)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testStrokeSlider() {
+        onView(withId(R.id.stroke_seekbar)).perform(setProgress(30));
+        assertEquals(mainActivityTestRule.getActivity().drawingView.getDrawPaint().getStrokeWidth(), 40, 0.00000001f);
+        onView(withId(R.id.stroke)).check(matches(withText("40")));
+    }
+
+    public static ViewAction setProgress(final int progress) {
+        return new ViewAction() {
+            @Override
+            public void perform(UiController uiController, View view) {
+                SeekBar seekBar = (SeekBar) view;
+                seekBar.setProgress(progress);
+            }
+            @Override
+            public String getDescription() {
+                return "Set a progress on a SeekBar";
+            }
+            @Override
+            public Matcher<View> getConstraints() {
+                return ViewMatchers.isAssignableFrom(SeekBar.class);
+            }
+        };
     }
 
 }

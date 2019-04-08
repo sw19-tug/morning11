@@ -123,6 +123,10 @@ public class DrawingView extends View {
         return drawPaint;
     }
 
+    public Paint getEraserPaint() {
+        return eraserPaint;
+    }
+
     public void setDrawPaint(Paint drawPaint) {
         this.drawPaint = drawPaint;
     }
