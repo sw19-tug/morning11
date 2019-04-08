@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 
@@ -33,6 +34,10 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
     TextView colorPurple;
 
     LinearLayout options;
+
+    LinearLayout btStroke;
+    LinearLayout strokeOptions;
+    SeekBar strokeSeekBar;
 
 
     @Override
@@ -60,6 +65,11 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         colorPurple = (TextView) findViewById(R.id.color_purple);
 
         options = findViewById(R.id.options);
+
+        btStroke = findViewById(R.id.bt_stroke);
+        strokeOptions = findViewById(R.id.stroke_options);
+        strokeSeekBar = findViewById(R.id.stroke_seekbar);
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -161,6 +171,34 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             public void onClick(View v) {
                 drawingView.setPaintColor(getResources().getColor(R.color.option_color_purple));
                 inflateColorButton(getResources().getColor(R.color.option_color_purple));
+            }
+        });
+
+        btStroke.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(strokeOptions.getVisibility() == View.GONE)
+                    strokeOptions.setVisibility(View.VISIBLE);
+                else
+                    strokeOptions.setVisibility(View.GONE);
+            }
+        });
+
+        strokeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                drawingView.getDrawPaint().setStrokeWidth(progress + 10);
+                drawingView.getEraserPaint().setStrokeWidth(progress + 10);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
 
