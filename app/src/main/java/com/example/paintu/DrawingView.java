@@ -10,11 +10,18 @@ import android.view.View;
 
 public class DrawingView extends View {
 
+    public interface DrawingInProgress {
+        public void onDrawingStart();
+        public void onDrawingEnd();
+    }
+
     public static final int TOOL_POINT = 1;
     public static final int TOOL_LINE = 2;
     public static final int TOOL_PATH = 3;
+    public static final int TOOL_PAINT_BUCKET = 4;
     public static final int TOOL_ERASER = 5;
 
+    DrawingInProgress listener;
     private Paint drawPaint, canvasPaint, eraserPaint;
     private int paintColor = 0xFF000000;
     private int backgroundColor = 0xFFFFFFFF;
@@ -63,7 +70,14 @@ public class DrawingView extends View {
             drawPath.draw(event);
         else if(tool == TOOL_ERASER)
             eraser.draw(event);
+
+        if(event.getAction() == MotionEvent.ACTION_DOWN && tool != TOOL_POINT && tool != TOOL_PAINT_BUCKET)
+            listener.onDrawingStart();
+        else if(event.getAction() == MotionEvent.ACTION_UP && tool != TOOL_POINT && tool != TOOL_PAINT_BUCKET)
+            listener.onDrawingEnd();
+
         this.invalidate();
+
         return true;
     }
 
@@ -103,5 +117,17 @@ public class DrawingView extends View {
 
     public void setTool(int tool) {
         this.tool = tool;
+    }
+
+    public Paint getDrawPaint() {
+        return drawPaint;
+    }
+
+    public void setDrawPaint(Paint drawPaint) {
+        this.drawPaint = drawPaint;
+    }
+
+    public void setListener(DrawingInProgress listener) {
+        this.listener = listener;
     }
 }

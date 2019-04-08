@@ -120,4 +120,16 @@ public class MainActivityEspressoTest {
         assertNotNull(mainActivityTestRule.getActivity().drawingView.eraser);
     }
 
+    @Test
+    public void testColorsVisible() {
+        onView(withId(R.id.colors)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testChosenColor() {
+        onView(withId(R.id.color_blue)).perform(click());
+        assertEquals(mainActivityTestRule.getActivity().drawingView.getPaintColor(), mainActivityTestRule.getActivity().getResources().getColor(R.color.option_color_blue));
+        assertEquals(mainActivityTestRule.getActivity().drawingView.getDrawPaint().getColor(), mainActivityTestRule.getActivity().getResources().getColor(R.color.option_color_blue));
+    }
+
 }
