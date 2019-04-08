@@ -21,6 +21,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -138,16 +139,16 @@ public class MainActivityEspressoTest {
     }
 
     @Test
-    public void TestSliderVisible() {
-        onView(withId(R.id.bt_stroke)).perform(click());
+    public void testSliderVisible() {
+        onView(withId(R.id.stroke)).check(matches(withText("10")));
         onView(withId(R.id.stroke_options)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testStrokeSlider() {
-        onView(withId(R.id.bt_stroke)).perform(click());
         onView(withId(R.id.stroke_seekbar)).perform(setProgress(30));
-        assertEquals(mainActivityTestRule.getActivity().drawingView.getDrawPaint().getStrokeWidth(), 30, 0.00000001f);
+        assertEquals(mainActivityTestRule.getActivity().drawingView.getDrawPaint().getStrokeWidth(), 40, 0.00000001f);
+        onView(withId(R.id.stroke)).check(matches(withText("40")));
     }
 
     public static ViewAction setProgress(final int progress) {
