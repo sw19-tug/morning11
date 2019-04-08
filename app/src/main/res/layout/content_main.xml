@@ -40,19 +40,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <LinearLayout
                 android:layout_weight="1"
-                android:id="@+id/bt_stroke"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center">
 
                 <TextView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="@drawable/ic_adjust_black_24dp"/>
+                    android:id="@+id/stroke"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:text="10"
+                    android:textColor="@android:color/black"/>
             </LinearLayout>
 
             <LinearLayout

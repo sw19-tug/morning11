@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
 
     LinearLayout options;
 
-    LinearLayout btStroke;
+    TextView stroke;
     LinearLayout strokeOptions;
     SeekBar strokeSeekBar;
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
 
         options = findViewById(R.id.options);
 
-        btStroke = findViewById(R.id.bt_stroke);
+        stroke = findViewById(R.id.stroke);
         strokeOptions = findViewById(R.id.stroke_options);
         strokeSeekBar = findViewById(R.id.stroke_seekbar);
 
@@ -174,21 +174,12 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             }
         });
 
-        btStroke.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(strokeOptions.getVisibility() == View.GONE)
-                    strokeOptions.setVisibility(View.VISIBLE);
-                else
-                    strokeOptions.setVisibility(View.GONE);
-            }
-        });
-
         strokeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 drawingView.getDrawPaint().setStrokeWidth(progress + 10);
                 drawingView.getEraserPaint().setStrokeWidth(progress + 10);
+                stroke.setText(Integer.toString(progress + 10));
             }
 
             @Override

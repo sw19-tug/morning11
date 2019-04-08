@@ -19,10 +19,6 @@ public class DrawPoint{
 
     public boolean drawPoint(MotionEvent event){
 
-        paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(10f);
-
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 canvas.drawPoint(event.getX(),event.getY(), paint);
