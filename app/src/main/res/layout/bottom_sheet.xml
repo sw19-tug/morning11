@@ -89,24 +89,25 @@
         android:id="@+id/tool_fill"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:src="@drawable/ic_fill_black_24dp" />
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="5"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="@string/tool_fill"/>
+            android:layout_weight="5"
+            android:text="@string/tool_fill"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
@@ -139,24 +140,25 @@
         android:id="@+id/tool_circle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:src="@drawable/ic_circle_black_24dp" />
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="5"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="@string/tool_circle"/>
+            android:layout_weight="5"
+            android:text="@string/tool_circle"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
@@ -164,24 +166,25 @@
         android:id="@+id/tool_rectangle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:src="@drawable/ic_rectangle_black_24dp" />
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="5"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="@string/tool_rectangle"/>
+            android:layout_weight="5"
+            android:text="@string/tool_rectangle"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
