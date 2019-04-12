@@ -20,6 +20,7 @@ public class DrawingView extends View {
     public static final int TOOL_PATH = 3;
     public static final int TOOL_PAINT_BUCKET = 4;
     public static final int TOOL_ERASER = 5;
+    public static final int TOOL_RECTANGLE = 7;
 
     DrawingInProgress listener;
     private Paint drawPaint, canvasPaint, eraserPaint;
@@ -31,7 +32,9 @@ public class DrawingView extends View {
     DrawPoint drawPoint;
     DrawLine drawLine;
     DrawPath drawPath;
+    DrawRectangle drawRectangle;
     DrawLine.Line line;
+    DrawRectangle.Rectangle rectangle;
     Eraser eraser;
 
     public DrawingView(Context context, AttributeSet attrs){
@@ -48,6 +51,7 @@ public class DrawingView extends View {
         drawLine = new DrawLine(canvas, drawPaint);
         drawPath = new DrawPath(canvas, drawPaint);
         eraser = new Eraser(canvas, eraserPaint, backgroundColor);
+        drawRectangle = new DrawRectangle(canvas, drawPaint);
     }
 
     @Override
@@ -58,6 +62,8 @@ public class DrawingView extends View {
             canvas.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(),
                     drawPaint);
         }
+        if(rectangle != null)
+            canvas.drawRect(rectangle.getLeft(), rectangle.getTop(), rectangle.getRight(), rectangle.getBottom(), drawPaint);
     }
 
     @Override
@@ -70,6 +76,8 @@ public class DrawingView extends View {
             drawPath.draw(event);
         else if(tool == TOOL_ERASER)
             eraser.draw(event);
+        else if(tool == TOOL_RECTANGLE)
+            rectangle = drawRectangle.draw(event);
 
         if(event.getAction() == MotionEvent.ACTION_DOWN && tool != TOOL_POINT && tool != TOOL_PAINT_BUCKET)
             listener.onDrawingStart();
