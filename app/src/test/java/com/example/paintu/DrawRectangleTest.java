@@ -6,7 +6,11 @@ import android.view.MotionEvent;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
+
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class DrawRectangleTest {
@@ -23,14 +27,14 @@ public class DrawRectangleTest {
         drawRectangle = new DrawRectangle(mockCanvas, mockPaint);
     }
 
+    @Test
     public void testDrawRectangle(){
         when(mockMotion.getAction()).thenReturn(MotionEvent.ACTION_DOWN);
         when(mockMotion.getX()).thenReturn(4f);
         when(mockMotion.getY()).thenReturn(4f);
 
         DrawRectangle.Rectangle rectangle = drawRectangle.draw(mockMotion);
-        Assert.assertEquals(rectangle.getLeft(), 4f ,0.00000001f);
-        Assert.assertEquals(rectangle.getTop(), 4f ,0.00000001f);
+        assertNull(rectangle);
 
 
         when(mockMotion.getAction()).thenReturn(MotionEvent.ACTION_MOVE);
@@ -45,13 +49,10 @@ public class DrawRectangleTest {
 
 
         when(mockMotion.getAction()).thenReturn(MotionEvent.ACTION_UP);
-        when(mockMotion.getX()).thenReturn(10f);
-        when(mockMotion.getY()).thenReturn(10f);
+        when(mockMotion.getX()).thenReturn(8f);
+        when(mockMotion.getY()).thenReturn(8f);
         rectangle = drawRectangle.draw(mockMotion);
-
-        Assert.assertEquals(rectangle.getLeft(), 4f ,0.00000001f);
-        Assert.assertEquals(rectangle.getTop(), 4f ,0.00000001f);
-        Assert.assertEquals(rectangle.getRight(), 10f ,0.00000001f);
-        Assert.assertEquals(rectangle.getBottom(), 10f ,0.00000001f);
+        assertNull(rectangle);
+        verify(mockCanvas).drawRect(4f, 4f, 8f, 8f, mockPaint);
     }
 }

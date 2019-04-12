@@ -33,24 +33,24 @@ public class DrawRectangle {
         {
             if(startX > x)
             {
-                rectangle.left = startX;
-                rectangle.right = x;
+                rectangle.left = x;
+                rectangle.right = startX;
             }
             else
             {
-                rectangle.left = x;
-                rectangle.right = startX;
+                rectangle.left = startX;
+                rectangle.right = x;
             }
 
             if(startY > y)
             {
-                rectangle.top = startY;
-                rectangle.bottom = y;
+                rectangle.top = y;
+                rectangle.bottom = startY;
             }
             else
             {
-                rectangle.top = y;
-                rectangle.bottom = startY;
+                rectangle.top = startY;
+                rectangle.bottom = y;
             }
             return rectangle;
         }
