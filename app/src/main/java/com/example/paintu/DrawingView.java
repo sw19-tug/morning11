@@ -20,7 +20,9 @@ public class DrawingView extends View {
     public static final int TOOL_PATH = 3;
     public static final int TOOL_PAINT_BUCKET = 4;
     public static final int TOOL_ERASER = 5;
+    public static final int TOOL_CIRCLE = 6;
     public static final int TOOL_RECTANGLE = 7;
+
 
     DrawingInProgress listener;
     private Paint drawPaint, canvasPaint, eraserPaint;
@@ -33,8 +35,10 @@ public class DrawingView extends View {
     DrawLine drawLine;
     DrawPath drawPath;
     DrawRectangle drawRectangle;
+    DrawCircle drawCircle;
     DrawLine.Line line;
     DrawRectangle.Rectangle rectangle;
+    DrawCircle.Circle circle;
     Eraser eraser;
 
     public DrawingView(Context context, AttributeSet attrs){
@@ -50,6 +54,7 @@ public class DrawingView extends View {
         drawPoint = new DrawPoint(canvas, drawPaint);
         drawLine = new DrawLine(canvas, drawPaint);
         drawPath = new DrawPath(canvas, drawPaint);
+        drawCircle = new DrawCircle(canvas, drawPaint);
         eraser = new Eraser(canvas, eraserPaint, backgroundColor);
         drawRectangle = new DrawRectangle(canvas, drawPaint);
     }
@@ -64,6 +69,8 @@ public class DrawingView extends View {
         }
         if(rectangle != null)
             canvas.drawRect(rectangle.getLeft(), rectangle.getTop(), rectangle.getRight(), rectangle.getBottom(), drawPaint);
+        if(circle != null)
+            canvas.drawCircle(circle.getCenterX(), circle.getCenterY(), circle.getRadius(), drawPaint);
     }
 
     @Override
@@ -76,6 +83,8 @@ public class DrawingView extends View {
             drawPath.draw(event);
         else if(tool == TOOL_ERASER)
             eraser.draw(event);
+        else if(tool == TOOL_CIRCLE)
+            circle = drawCircle.draw(event);
         else if(tool == TOOL_RECTANGLE)
             rectangle = drawRectangle.draw(event);
 
