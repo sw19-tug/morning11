@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
     LinearLayout toolLineLayout;
     LinearLayout toolPathLayout;
     LinearLayout toolEraserLayout;
+    LinearLayout toolFillLayout;
     TextView colorBlack;
     TextView colorWhite;
     TextView colorRed;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         toolLineLayout = (LinearLayout) findViewById(R.id.tool_line);
         toolPathLayout = (LinearLayout) findViewById(R.id.tool_path);
         toolEraserLayout = (LinearLayout) findViewById(R.id.tool_eraser);
+        toolFillLayout = (LinearLayout) findViewById(R.id.tool_fill);
 
         colorBlack = (TextView) findViewById(R.id.color_black);
         colorWhite = (TextView) findViewById(R.id.color_white);
@@ -106,6 +108,14 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             @Override
             public void onClick(View v) {
                 drawingView.setTool(DrawingView.TOOL_ERASER);
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
+        toolFillLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawingView.setTool(DrawingView.TOOL_PAINT_BUCKET);
                 sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });

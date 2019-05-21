@@ -33,6 +33,7 @@ public class DrawingView extends View {
     DrawPath drawPath;
     DrawLine.Line line;
     Eraser eraser;
+    BucketFill bucketFill;
 
     public DrawingView(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -48,6 +49,8 @@ public class DrawingView extends View {
         drawLine = new DrawLine(canvas, drawPaint);
         drawPath = new DrawPath(canvas, drawPaint);
         eraser = new Eraser(canvas, eraserPaint, backgroundColor);
+        bucketFill = new BucketFill(bitmap, drawPaint);
+
     }
 
     @Override
@@ -70,6 +73,10 @@ public class DrawingView extends View {
             drawPath.draw(event);
         else if(tool == TOOL_ERASER)
             eraser.draw(event);
+        else if(tool == TOOL_PAINT_BUCKET) {
+            bucketFill.draw(event);
+        }
+
 
         if(event.getAction() == MotionEvent.ACTION_DOWN && tool != TOOL_POINT && tool != TOOL_PAINT_BUCKET)
             listener.onDrawingStart();
