@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
     LinearLayout toolLineLayout;
     LinearLayout toolPathLayout;
     LinearLayout toolEraserLayout;
+    LinearLayout toolCircleLayout;
     LinearLayout toolRectangleLayout;
     TextView colorBlack;
     TextView colorWhite;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         toolLineLayout = (LinearLayout) findViewById(R.id.tool_line);
         toolPathLayout = (LinearLayout) findViewById(R.id.tool_path);
         toolEraserLayout = (LinearLayout) findViewById(R.id.tool_eraser);
+        toolCircleLayout = (LinearLayout) findViewById(R.id.tool_circle);
         toolRectangleLayout = (LinearLayout) findViewById(R.id.tool_rectangle);
 
         colorBlack = (TextView) findViewById(R.id.color_black);
@@ -116,6 +118,14 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             @Override
             public void onClick(View v) {
                 drawingView.setTool(DrawingView.TOOL_RECTANGLE);
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
+        toolCircleLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawingView.setTool(DrawingView.TOOL_CIRCLE);
                 sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
