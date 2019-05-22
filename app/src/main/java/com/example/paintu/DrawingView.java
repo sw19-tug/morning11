@@ -40,6 +40,7 @@ public class DrawingView extends View {
     DrawRectangle.Rectangle rectangle;
     DrawCircle.Circle circle;
     Eraser eraser;
+    BucketFill bucketFill;
 
     public DrawingView(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -57,6 +58,7 @@ public class DrawingView extends View {
         drawCircle = new DrawCircle(canvas, drawPaint);
         eraser = new Eraser(canvas, eraserPaint, backgroundColor);
         drawRectangle = new DrawRectangle(canvas, drawPaint);
+        bucketFill = new BucketFill(bitmap, drawPaint);
     }
 
     @Override
@@ -87,6 +89,9 @@ public class DrawingView extends View {
             circle = drawCircle.draw(event);
         else if(tool == TOOL_RECTANGLE)
             rectangle = drawRectangle.draw(event);
+        else if(tool == TOOL_PAINT_BUCKET) {
+            bucketFill.draw(event);
+        }
 
         if(event.getAction() == MotionEvent.ACTION_DOWN && tool != TOOL_POINT && tool != TOOL_PAINT_BUCKET)
             listener.onDrawingStart();
