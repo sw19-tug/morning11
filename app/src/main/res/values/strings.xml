@@ -8,4 +8,5 @@
     <string name="tool_eraser">Eraser</string>
     <string name="tool_circle">Circle</string>
     <string name="tool_rectangle">Rectangle</string>
+    <string name="save">Save</string>
 </resources>
