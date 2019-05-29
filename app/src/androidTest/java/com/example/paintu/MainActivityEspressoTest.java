@@ -1,5 +1,6 @@
 package com.example.paintu;
 
+import android.app.AlertDialog;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -167,6 +168,17 @@ public class MainActivityEspressoTest {
                 return ViewMatchers.isAssignableFrom(SeekBar.class);
             }
         };
+    }
+
+    @Test
+    public void testSaveButtonDisplayed() {
+        onView(withId(R.id.save_btn)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testSaveButtonClicked() {
+        onView(withId(R.id.save_btn)).perform(click());
+        onView(withText("Save drawing to device Gallery?")).check(matches(isDisplayed()));
     }
 
 }
