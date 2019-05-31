@@ -3,6 +3,7 @@ package com.example.paintu;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -12,6 +13,7 @@ public class DrawingView extends View {
 
     public interface DrawingInProgress {
         public void onDrawingStart();
+
         public void onDrawingEnd();
     }
 
@@ -21,6 +23,7 @@ public class DrawingView extends View {
     public static final int TOOL_PAINT_BUCKET = 4;
     public static final int TOOL_ERASER = 5;
     public static final int TOOL_RECTANGLE = 7;
+    public static final int TOOL_IMPORT = 8;
 
     DrawingInProgress listener;
     private Paint drawPaint, canvasPaint, eraserPaint;
@@ -36,8 +39,14 @@ public class DrawingView extends View {
     DrawLine.Line line;
     DrawRectangle.Rectangle rectangle;
     Eraser eraser;
+    DrawBitmap drawBitmap;
+    DrawBitmap.BitmapOwn ownBitmap;
+    private int width = 0;
+    private int height = 0;
+    private boolean finalizeBitmap = false;
 
-    public DrawingView(Context context, AttributeSet attrs){
+
+    public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setupDrawing();
     }
@@ -57,31 +66,67 @@ public class DrawingView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if(bitmap == null)
+            return;
+
         canvas.drawBitmap(bitmap, 0, 0, canvasPaint);
-        if(line != null && line.getEndX() >= 0 && line.getEndY() >= 0) {
+
+        if (line != null && line.getEndX() >= 0 && line.getEndY() >= 0) {
             canvas.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(),
                     drawPaint);
         }
-        if(rectangle != null)
+
+        if (rectangle != null)
             canvas.drawRect(rectangle.getLeft(), rectangle.getTop(), rectangle.getRight(), rectangle.getBottom(), drawPaint);
+
+
+        if (!finalizeBitmap) {
+            canvas.save();
+            if (this.ownBitmap != null) {
+                canvas.setMatrix(drawBitmap.getMatrix());  // get transformation matrix
+                canvas.drawBitmap(this.ownBitmap.getBitmap(), this.ownBitmap.getLeft(), this.ownBitmap.getTop(), drawPaint);
+            }
+            canvas.restore();
+        } else {
+            finalizeBitmap = false;
+            if (this.ownBitmap != null) {
+                // save origin!
+                this.canvas.setMatrix(drawBitmap.getMatrix());  // get transformation matrix
+                this.canvas.drawBitmap(this.ownBitmap.getBitmap(), this.ownBitmap.getLeft(), this.ownBitmap.getTop(), drawPaint);
+                this.canvas.setMatrix(new Matrix());
+                canvas = null;
+                this.ownBitmap = null;
+            }
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(tool == TOOL_POINT)
-            drawPoint.drawPoint(event);
-        else if(tool == TOOL_LINE)
-            line = drawLine.draw(event);
-        else if(tool == TOOL_PATH)
-            drawPath.draw(event);
-        else if(tool == TOOL_ERASER)
-            eraser.draw(event);
-        else if(tool == TOOL_RECTANGLE)
-            rectangle = drawRectangle.draw(event);
 
-        if(event.getAction() == MotionEvent.ACTION_DOWN && tool != TOOL_POINT && tool != TOOL_PAINT_BUCKET)
+        switch (tool) {
+            case TOOL_POINT:
+                drawPoint.drawPoint(event);
+                break;
+            case TOOL_LINE:
+                line = drawLine.draw(event);
+                break;
+            case TOOL_PATH:
+                drawPath.draw(event);
+                break;
+            case TOOL_ERASER:
+                eraser.draw(event);
+                break;
+            case TOOL_IMPORT:
+                drawBitmap.draw(event);
+                break;
+            default:
+                break;
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_DOWN && tool != TOOL_POINT && tool != TOOL_PAINT_BUCKET && tool != TOOL_IMPORT)
             listener.onDrawingStart();
-        else if(event.getAction() == MotionEvent.ACTION_UP && tool != TOOL_POINT && tool != TOOL_PAINT_BUCKET)
+        else if (event.getAction() == MotionEvent.ACTION_UP && tool != TOOL_POINT && tool != TOOL_PAINT_BUCKET && tool != TOOL_IMPORT)
             listener.onDrawingEnd();
 
         this.invalidate();
@@ -105,7 +150,6 @@ public class DrawingView extends View {
         eraserPaint.setStyle(Paint.Style.STROKE);
         eraserPaint.setStrokeJoin(Paint.Join.ROUND);
         eraserPaint.setStrokeCap(Paint.Cap.ROUND);
-
 
         canvasPaint = new Paint(Paint.DITHER_FLAG);
     }
@@ -142,4 +186,26 @@ public class DrawingView extends View {
     public void setListener(DrawingInProgress listener) {
         this.listener = listener;
     }
+
+    public void finalizeBitmap() {
+        finalizeBitmap = true;
+    }
+
+    public Boolean isBitmapFinalized() {
+        return finalizeBitmap;
+    }
+
+    public void setDrawBitmap(Bitmap bitmap) {
+        this.drawBitmap = new DrawBitmap(this.canvas, bitmap);
+        this.ownBitmap = this.drawBitmap.getOwnBitmap();
+    }
+
+    public int get_height() {
+        return height;
+    }
+
+    public int get_width() {
+        return width;
+    }
+
 }
