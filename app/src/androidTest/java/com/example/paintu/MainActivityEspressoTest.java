@@ -18,6 +18,8 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -167,6 +169,13 @@ public class MainActivityEspressoTest {
                 return ViewMatchers.isAssignableFrom(SeekBar.class);
             }
         };
+    }
+
+    @Test
+    public void testImportFromGallery() {
+        onView(withId(R.id.tool_import_gallery)).check(matches(isDisplayed()));
+        onView(withId(R.id.tool_import_gallery)).perform(click());
+        intended(toPackage("com.android.gallery"));
     }
 
 }
