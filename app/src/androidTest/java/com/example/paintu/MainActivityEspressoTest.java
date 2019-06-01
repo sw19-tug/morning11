@@ -1,6 +1,5 @@
 package com.example.paintu;
 
-import android.app.AlertDialog;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -178,6 +177,14 @@ public class MainActivityEspressoTest {
         onView(withId(R.id.tool_import_gallery)).perform(click());
         intended(toPackage("com.android.gallery"));
     }
+
+    @Test
+    public void testImportFromCamera() {
+        onView(withId(R.id.tool_import_camera)).check(matches(isDisplayed()));
+        onView(withId(R.id.tool_import_camera)).perform(click());
+        intended(toPackage("com.android.camera"));
+    }
+
     public void testSaveButtonDisplayed() {
         onView(withId(R.id.save_btn)).check(matches(isDisplayed()));
     }
