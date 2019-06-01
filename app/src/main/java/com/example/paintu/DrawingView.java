@@ -52,6 +52,7 @@ public class DrawingView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
+        canvas.drawColor(0xFFFFFFFF);
         drawPoint = new DrawPoint(canvas, drawPaint);
         drawLine = new DrawLine(canvas, drawPaint);
         drawPath = new DrawPath(canvas, drawPaint);
@@ -156,4 +157,8 @@ public class DrawingView extends View {
     public void setListener(DrawingInProgress listener) {
         this.listener = listener;
     }
+    public Bitmap getBitmap () {
+        return bitmap;
+    }
+
 }

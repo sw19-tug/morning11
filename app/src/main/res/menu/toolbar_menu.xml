@@ -10,4 +10,10 @@
         android:icon="@drawable/ic_style_black_24dp"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/save_btn"
+        android:title="@string/save"
+        android:icon="@drawable/ic_save_black_24dp"
+        app:showAsAction="always"/>
+
 </menu>

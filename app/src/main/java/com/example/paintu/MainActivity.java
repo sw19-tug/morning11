@@ -1,9 +1,19 @@
 package com.example.paintu;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,9 +23,18 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity implements DrawingView.DrawingInProgress {
+
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 112;
 
     LinearLayout linearBottomSheet;
     BottomSheetBehavior sheetBehavior;
@@ -233,9 +252,18 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         return true;
     }
 
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.bt_tools_chooser) {
@@ -245,6 +273,41 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
                 sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
             return true;
+        }
+        else if(id == R.id.save_btn){
+
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+                this.save();
+            else
+            {
+                if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Permission is not granted
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        // Show an explanation to the user *asynchronously* -- don't block
+                        // this thread waiting for the user's response! After the user
+                        // sees the explanation, try again to request the permission.
+                    } else {
+                        // No explanation needed; request the permission
+                        Log.d("SAVING", "Comes before");
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                        Log.d("SAVING", "Comes after");
+
+                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                        // app-defined int constant. The callback method gets the
+                        // result of the request.
+                    }
+                } else {
+                    this.save();
+                }
+            }
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -401,6 +464,69 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             }
         });
         options.startAnimation(fadeIn);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    this.save();
+                    return;
+                }
+
+                // other 'case' lines to check for other
+                // permissions this app might request.
+            }
+        }
+    }
+
+    public void save () {
+        AlertDialog.Builder saveDialog = new AlertDialog.Builder(this);
+        saveDialog.setTitle("Save drawing");
+        saveDialog.setMessage("Save drawing to device Gallery?");
+        saveDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                String filename;
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                filename = sdf.format(date);
+
+                try {
+                    File path = new File(Environment.getExternalStorageDirectory(), "paintu");
+                    if (!path.exists())
+                        path.mkdirs();
+                    OutputStream fOut = null;
+                    File file = new File(path, filename + ".png");
+                    fOut = new FileOutputStream(file);
+
+                    drawingView.getBitmap().compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                    fOut.flush();
+                    fOut.close();
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (filename != null) {
+                    Toast savedToast = Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG);
+                    savedToast.show();
+                } else {
+                    Toast unSaved = Toast.makeText(getApplicationContext(), "Opps, something went wrong, image not saved", Toast.LENGTH_LONG);
+                    unSaved.show();
+                }
+
+            }
+
+        });
+        saveDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        saveDialog.show();
     }
 }
 
