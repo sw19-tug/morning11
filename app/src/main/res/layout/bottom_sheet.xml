@@ -213,4 +213,29 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/tool_import_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_photo_camera_24px" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Take Picture"/>
+
+    </LinearLayout>
+
 </LinearLayout>
