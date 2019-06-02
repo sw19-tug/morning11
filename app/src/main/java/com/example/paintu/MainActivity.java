@@ -1,24 +1,23 @@
 package com.example.paintu;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -43,6 +42,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements DrawingView.DrawingInProgress {
     protected static final int GALLERY_PICTURE = 1;
+    protected static final int CAMERA_PICTURE = 2;
 
 
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 112;
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
     LinearLayout toolRectangleLayout;
     LinearLayout toolFillLayout;
     LinearLayout toolImportImageFromGalleryLayout;
+    LinearLayout toolImportImageFromCameraLayout;
 
     TextView colorBlack;
     TextView colorWhite;
@@ -75,9 +76,12 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
     LinearLayout colorRow;
     SeekBar strokeSeekBar;
 
-    int lastUsedTool = 0;
+    int lastUsedTool = 1;
 
     FloatingActionButton dragDone;
+
+    // we use this when photo is taken
+    String currentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         toolRectangleLayout = (LinearLayout) findViewById(R.id.tool_rectangle);
         toolFillLayout = (LinearLayout) findViewById(R.id.tool_fill);
         toolImportImageFromGalleryLayout = (LinearLayout) findViewById(R.id.tool_import_gallery);
+        toolImportImageFromCameraLayout = (LinearLayout) findViewById(R.id.tool_import_camera);
 
         dragDone = (FloatingActionButton) findViewById(R.id.button_dragdone);
 
@@ -290,15 +295,62 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             }
         });
 
+        toolImportImageFromCameraLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                lastUsedTool = drawingView.getTool();
+                drawingView.setTool(DrawingView.TOOL_IMPORT);
+
+                strokeOptions.setVisibility(View.GONE);
+                colorRow.setVisibility(View.GONE);
+
+                int camera = ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA);
+                int storage = ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+                if (camera != PackageManager.PERMISSION_GRANTED && storage != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(MainActivity.this, "You dont gave me permission to use this!", Toast.LENGTH_LONG).show();
+
+                    return;
+                }
+
+                // options.setVisibility(View.GONE);
+
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // Ensure that there's a camera activity to handle the intent
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    // Create the File where the photo should go
+                    File photoFile = null;
+                    try {
+                        photoFile = createImageFile();
+                        galleryAddPic();
+                    } catch (IOException ex) {
+                        Toast.makeText(MainActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                    // Continue only if the File was successfully created
+                    if (photoFile != null) {
+                        Uri photoURI = FileProvider.getUriForFile(MainActivity.this,
+                                "com.example.paintu.fileprovider",
+                                photoFile);
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
+                        startActivityForResult(takePictureIntent, CAMERA_PICTURE);
+                    }
+                }
+
+            }
+        });
+
         // reset to last tool
         dragDone.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View v) {
+                //dragDone.hide();
                 dragDone.setVisibility(View.GONE);
                 drawingView.finalizeBitmap();
                 drawingView.setTool(lastUsedTool);
-                //options.setVisibility(View.VISIBLE);
                 strokeOptions.setVisibility(View.VISIBLE);
                 colorRow.setVisibility(View.VISIBLE);
             }
@@ -578,6 +630,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         });
         saveDialog.show();
     }
+
     // https://stackoverflow.com/questions/41150995/appcompatactivity-oncreate-can-only-be-called-from-within-the-same-library-group
     // RestrictedApi
     //-------------
@@ -604,6 +657,8 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result code is RESULT_OK only if the user selects an Image
+
+        //dragDone.show(); // does not work
         dragDone.setVisibility(View.VISIBLE);
 
         //Bitmap bitmap_resized = null;
@@ -628,6 +683,16 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             }
         }
 
+        if (resultCode == RESULT_OK && requestCode == CAMERA_PICTURE) {
+            try {
+                bitmap_full = BitmapFactory.decodeFile(currentPhotoPath);
+                actionCallOk = true;
+            } catch (Exception e) {
+                actionCallOk = false;
+                e.printStackTrace();
+            }
+        }
+
         /* draw resized image */
         if (bitmap_full != null && actionCallOk == true) {
             drawingView.setDrawBitmap(bitmap_full);
@@ -643,6 +708,32 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             Toast.makeText(this, "Image not loaded.", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    // create empty temporary image
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    // trigger mediascanner to add image to gallery
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 }
 
