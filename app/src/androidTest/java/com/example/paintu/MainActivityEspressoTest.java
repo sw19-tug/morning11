@@ -264,4 +264,10 @@ public class MainActivityEspressoTest {
         onView(withText("Save drawing to device Gallery?")).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void testFilters() {
+        onView(withId(R.id.bt_tools_chooser)).perform(click());
+        onView(withId(R.id.tool_filters)).check(matches(isDisplayed()));
+    }
+
 }
