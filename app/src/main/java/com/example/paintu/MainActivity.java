@@ -2,14 +2,13 @@ package com.example.paintu;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.assist.AssistContent;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -29,11 +28,9 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity implements DrawingView.DrawingInProgress {
@@ -313,6 +310,14 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             }
 
         }
+           if (id == R.id.settings_button) {
+
+               Intent intent = new Intent(this, SettingsActivity.class);
+
+               startActivity(intent);
+
+               return true;
+    }
 
         return super.onOptionsItemSelected(item);
     }

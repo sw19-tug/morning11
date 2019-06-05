@@ -16,4 +16,10 @@
         android:icon="@drawable/ic_save_black_24dp"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/settings_button"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_save_black_24dp"
+        app:showAsAction=""/>
+
 </menu>
