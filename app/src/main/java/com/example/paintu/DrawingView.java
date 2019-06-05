@@ -45,6 +45,7 @@ public class DrawingView extends View {
     Eraser eraser;
     BucketFill bucketFill;
     BlackAndWhiteFilter blackAndWhiteFilter;
+    VintageFilter vintageFilter;
 
     DrawBitmap drawBitmap;
     DrawBitmap.BitmapOwn ownBitmap;
@@ -73,6 +74,7 @@ public class DrawingView extends View {
         drawRectangle = new DrawRectangle(canvas, drawPaint);
         bucketFill = new BucketFill(bitmap, drawPaint);
         blackAndWhiteFilter = new BlackAndWhiteFilter(canvas, bitmap);
+        vintageFilter = new VintageFilter(canvas, bitmap);
     }
 
     @Override
@@ -197,10 +199,10 @@ public class DrawingView extends View {
             case 0:
                 blackAndWhiteFilter.applyFilter();
             /*case 1:
-                deepFryFilter.applyFilter();
+                deepFryFilter.applyFilter();*/
             case 2:
                 vintageFilter.applyFilter();
-            */
+
         }
     }
 
