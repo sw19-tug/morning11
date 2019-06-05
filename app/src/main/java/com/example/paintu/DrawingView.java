@@ -25,7 +25,7 @@ public class DrawingView extends View {
     public static final int TOOL_CIRCLE = 6;
     public static final int TOOL_RECTANGLE = 7;
     public static final int TOOL_IMPORT = 8;
-
+    public static final int TOOL_FILTERS = 9;
 
     DrawingInProgress listener;
     private Paint drawPaint, canvasPaint, eraserPaint;
@@ -44,6 +44,7 @@ public class DrawingView extends View {
     DrawCircle.Circle circle;
     Eraser eraser;
     BucketFill bucketFill;
+    BlackAndWhiteFilter blackAndWhiteFilter;
 
     DrawBitmap drawBitmap;
     DrawBitmap.BitmapOwn ownBitmap;
@@ -71,6 +72,7 @@ public class DrawingView extends View {
         eraser = new Eraser(canvas, eraserPaint, backgroundColor);
         drawRectangle = new DrawRectangle(canvas, drawPaint);
         bucketFill = new BucketFill(bitmap, drawPaint);
+        blackAndWhiteFilter = new BlackAndWhiteFilter(canvas, bitmap);
     }
 
     @Override
@@ -190,6 +192,18 @@ public class DrawingView extends View {
         return eraserPaint;
     }
 
+    public void applyFilter(int which){
+        switch (which){
+            case 0:
+                blackAndWhiteFilter.applyFilter();
+            /*case 1:
+                deepFryFilter.applyFilter();
+            case 2:
+                vintageFilter.applyFilter();
+            */
+        }
+    }
+
     public void setDrawPaint(Paint drawPaint) {
         this.drawPaint = drawPaint;
     }
@@ -213,6 +227,7 @@ public class DrawingView extends View {
         this.drawBitmap = new DrawBitmap(this.canvas, bitmap);
         this.ownBitmap = this.drawBitmap.getOwnBitmap();
     }
+
 
     public int get_height() {
         return height;

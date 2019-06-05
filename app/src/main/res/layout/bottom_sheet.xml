@@ -235,4 +235,29 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/tool_filters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_filter_24dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="@string/tool_filters"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
 </LinearLayout>

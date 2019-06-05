@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
     LinearLayout toolFillLayout;
     LinearLayout toolImportImageFromGalleryLayout;
     LinearLayout toolImportImageFromCameraLayout;
+    LinearLayout toolFiltersLayout;
 
     TextView colorBlack;
     TextView colorWhite;
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         toolFillLayout = (LinearLayout) findViewById(R.id.tool_fill);
         toolImportImageFromGalleryLayout = (LinearLayout) findViewById(R.id.tool_import_gallery);
         toolImportImageFromCameraLayout = (LinearLayout) findViewById(R.id.tool_import_camera);
+        toolFiltersLayout = (LinearLayout) findViewById(R.id.tool_filters);
 
         dragDone = (FloatingActionButton) findViewById(R.id.button_dragdone);
 
@@ -353,6 +355,26 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
                 drawingView.setTool(lastUsedTool);
                 strokeOptions.setVisibility(View.VISIBLE);
                 colorRow.setVisibility(View.VISIBLE);
+            }
+        });
+
+        toolFiltersLayout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //  drawingView.setTool(DrawingView.TOOL_FILTERS);
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                builder.setTitle(R.string.pick_filter)
+                        .setItems(R.array.filters_names, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                drawingView.applyFilter(which);
+
+                            }
+                        });
+                builder.show();
             }
         });
     }
