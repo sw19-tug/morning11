@@ -3,15 +3,28 @@ package com.example.paintu;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.SystemClock;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.action.CoordinatesProvider;
+import android.support.test.espresso.action.GeneralClickAction;
+import android.support.test.espresso.action.Press;
+import android.support.test.espresso.action.Tap;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.text.format.DateUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SeekBar;
+import android.app.Instrumentation;
+
 
 import junit.framework.AssertionFailedError;
 
@@ -19,6 +32,8 @@ import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -42,6 +57,7 @@ public class MainActivityEspressoTest {
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
+    /*
     @Test
     public void testButtonVisible() {
         onView(withId(R.id.bt_tools_chooser)).check(matches(isDisplayed()));
@@ -264,4 +280,69 @@ public class MainActivityEspressoTest {
         onView(withText("Save drawing to device Gallery?")).check(matches(isDisplayed()));
     }
 
+    */
+    @Test
+    public void testUndoButtonClicked() {
+        long downTime = SystemClock.uptimeMillis();
+        long eventTime = SystemClock.uptimeMillis();
+
+        float xStart = 200;
+        float yStart = 200;
+
+        MotionEvent event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, xStart, yStart, 0);
+
+        MainActivity mainActivity = mainActivityTestRule.getActivity();
+        DrawingView drawingView = mainActivity.drawingView;
+
+        ArrayList<Bitmap> bitmapHistory = drawingView.bitmapHistory;
+
+        // check if history is empty
+        assert(bitmapHistory.size() == 0);
+
+        // make dot
+        onView(withId(R.id.drawing_view)).perform(clickXY(100,100));
+
+        // save Bitmap with dot
+        Bitmap safedBitmap = Bitmap.createBitmap(drawingView.bitmap);
+
+        // check if we added something to our history
+        assert(bitmapHistory.size() == 1);
+
+        // make another dot
+        onView(withId(R.id.drawing_view)).perform(clickXY(200,200));
+
+        // check if we added another undo element
+        assert(bitmapHistory.size() == 2);
+
+        // make undo
+        onView(withId(R.id.bt_undo)).perform(click());
+
+        // check if restored bitmap is same as safedBitmap
+        assert(drawingView.bitmap.sameAs(drawnBitmap));
+
+        // all good, else fucked up
+
+    }
+
+    // https://stackoverflow.com/questions/22177590/click-by-bounds-coordinates
+    public static ViewAction clickXY(final int x, final int y){
+        return new GeneralClickAction(
+                Tap.SINGLE,
+                new CoordinatesProvider() {
+                    @Override
+                    public float[] calculateCoordinates(View view) {
+
+                        final int[] screenPos = new int[2];
+                        view.getLocationOnScreen(screenPos);
+
+                        final float screenX = screenPos[0] + x;
+                        final float screenY = screenPos[1] + y;
+                        float[] coordinates = {screenX, screenY};
+
+                        return coordinates;
+                    }
+                },
+                Press.FINGER);
+    }
 }
+
