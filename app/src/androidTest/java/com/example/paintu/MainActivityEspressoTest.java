@@ -61,7 +61,6 @@ public class MainActivityEspressoTest {
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    /*
     @Test
     public void testButtonVisible() {
         onView(withId(R.id.bt_tools_chooser)).check(matches(isDisplayed()));
@@ -284,7 +283,6 @@ public class MainActivityEspressoTest {
         onView(withText("Save drawing to device Gallery?")).check(matches(isDisplayed()));
     }
 
-    */
     @Test
     public void testUndoButtonClicked() {
         MainActivity mainActivity = mainActivityTestRule.getActivity();
