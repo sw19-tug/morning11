@@ -9,4 +9,5 @@
     <string name="tool_circle">Circle</string>
     <string name="tool_rectangle">Rectangle</string>
     <string name="save">Save</string>
+    <string name="undo">Undo</string>>
 </resources>

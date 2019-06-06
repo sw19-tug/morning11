@@ -387,6 +387,11 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             }
             return true;
         }
+        else if(id == R.id.bt_undo){
+            this.drawingView.undo();
+            return super.onOptionsItemSelected(item);
+        }
+
         else if(id == R.id.save_btn){
 
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)

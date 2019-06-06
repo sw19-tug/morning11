@@ -9,6 +9,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class DrawingView extends View {
 
     public interface DrawingInProgress {
@@ -33,6 +35,7 @@ public class DrawingView extends View {
     private int backgroundColor = 0xFFFFFFFF;
     Canvas canvas;
     Bitmap bitmap;
+    ArrayList<Bitmap> bitmapHistory = new ArrayList<>();
     int tool = TOOL_POINT;
     DrawPoint drawPoint;
     DrawLine drawLine;
@@ -116,6 +119,21 @@ public class DrawingView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        // saves the bitmap in the state BEFORE you actually draw sth to it :)
+        if(event.getAction() == MotionEvent.ACTION_DOWN)
+        {
+            if(bitmapHistory.size() < 15)
+            {
+                bitmapHistory.add(Bitmap.createBitmap(bitmap));
+            }
+            else
+            {
+                bitmapHistory.remove(0);
+                bitmapHistory.add(Bitmap.createBitmap(bitmap));
+            }
+        }
+
         if(tool == TOOL_POINT)
             drawPoint.drawPoint(event);
         else if(tool == TOOL_LINE)
@@ -141,6 +159,8 @@ public class DrawingView extends View {
             listener.onDrawingEnd();
 
         this.invalidate();
+
+
 
         return true;
     }
@@ -220,6 +240,24 @@ public class DrawingView extends View {
 
     public int get_width() {
         return width;
+    }
+
+    public void undo() {
+        // for debug session print out the size
+        //
+        System.out.println(bitmapHistory.size());
+
+        if(bitmapHistory.size() < 1)
+        {
+            //MainActivity
+            return;
+        }
+        this.bitmap = this.bitmapHistory.get(bitmapHistory.size() - 1);
+        this.canvas.setBitmap(bitmap);
+        this.invalidate();
+        this.bitmapHistory.remove(bitmapHistory.size() - 1); // removes last element
+
+        System.out.println(1);
     }
 
 }
