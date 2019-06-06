@@ -318,7 +318,7 @@ public class MainActivityEspressoTest {
         onView(withId(R.id.bt_undo)).perform(click());
 
         // check if restored bitmap is same as safedBitmap
-        assert(drawingView.bitmap.sameAs(drawnBitmap));
+        assert(drawingView.bitmap.sameAs(safedBitmap));
 
         // all good, else fucked up
 
