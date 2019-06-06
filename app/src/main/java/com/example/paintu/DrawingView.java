@@ -19,6 +19,12 @@ public class DrawingView extends View {
         public void onDrawingEnd();
     }
 
+    public interface UndoBtnAvailable {
+        public void enableUndoBt();
+
+        public void disableUndoBt();
+    }
+
     public static final int TOOL_POINT = 1;
     public static final int TOOL_LINE = 2;
     public static final int TOOL_PATH = 3;
@@ -30,6 +36,7 @@ public class DrawingView extends View {
 
 
     DrawingInProgress listener;
+    UndoBtnAvailable btnListner;
     private Paint drawPaint, canvasPaint, eraserPaint;
     private int paintColor = 0xFF000000;
     private int backgroundColor = 0xFFFFFFFF;
@@ -126,11 +133,13 @@ public class DrawingView extends View {
             if(bitmapHistory.size() < 15)
             {
                 bitmapHistory.add(Bitmap.createBitmap(bitmap));
+                btnListner.enableUndoBt();
             }
             else
             {
                 bitmapHistory.remove(0);
                 bitmapHistory.add(Bitmap.createBitmap(bitmap));
+                btnListner.enableUndoBt();
             }
         }
 
@@ -217,6 +226,11 @@ public class DrawingView extends View {
     public void setListener(DrawingInProgress listener) {
         this.listener = listener;
     }
+
+    public void setBtnListner(UndoBtnAvailable btnListner) {
+        this.btnListner = btnListner;
+    }
+
     public Bitmap getBitmap () {
         return bitmap;
     }
@@ -242,6 +256,14 @@ public class DrawingView extends View {
         return width;
     }
 
+    public boolean isUndoPossible()
+    {
+        if(bitmapHistory.size() >= 1)
+            return true;
+        else
+            return false;
+    }
+
     public void undo() {
         // for debug session print out the size
         //
@@ -249,7 +271,6 @@ public class DrawingView extends View {
 
         if(bitmapHistory.size() < 1)
         {
-            //MainActivity
             return;
         }
         this.bitmap = this.bitmapHistory.get(bitmapHistory.size() - 1);
