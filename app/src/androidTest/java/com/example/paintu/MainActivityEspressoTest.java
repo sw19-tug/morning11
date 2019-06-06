@@ -19,7 +19,9 @@ import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.text.format.DateUtils;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SeekBar;
@@ -49,7 +51,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVi
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 
 @RunWith(AndroidJUnit4.class)
@@ -283,21 +287,13 @@ public class MainActivityEspressoTest {
     */
     @Test
     public void testUndoButtonClicked() {
-        long downTime = SystemClock.uptimeMillis();
-        long eventTime = SystemClock.uptimeMillis();
-
-        float xStart = 200;
-        float yStart = 200;
-
-        MotionEvent event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, xStart, yStart, 0);
-
         MainActivity mainActivity = mainActivityTestRule.getActivity();
         DrawingView drawingView = mainActivity.drawingView;
 
         ArrayList<Bitmap> bitmapHistory = drawingView.bitmapHistory;
 
         // check if history is empty
-        assert(bitmapHistory.size() == 0);
+        assertEquals(bitmapHistory.size(),0);
 
         // make dot
         onView(withId(R.id.drawing_view)).perform(clickXY(100,100));
@@ -306,21 +302,74 @@ public class MainActivityEspressoTest {
         Bitmap safedBitmap = Bitmap.createBitmap(drawingView.bitmap);
 
         // check if we added something to our history
-        assert(bitmapHistory.size() == 1);
+        assertEquals(bitmapHistory.size(),1);
 
         // make another dot
         onView(withId(R.id.drawing_view)).perform(clickXY(200,200));
 
         // check if we added another undo element
-        assert(bitmapHistory.size() == 2);
+        assertEquals(bitmapHistory.size() ,2);
 
         // make undo
         onView(withId(R.id.bt_undo)).perform(click());
 
         // check if restored bitmap is same as safedBitmap
-        assert(drawingView.bitmap.sameAs(safedBitmap));
+        assertTrue(drawingView.bitmap.sameAs(safedBitmap));
 
         // all good, else fucked up
+
+    }
+
+    @Test
+    public void testUndoFunctionMax() {
+        // get MainActivity
+        MainActivity mainActivity = mainActivityTestRule.getActivity();
+
+        // get DrawingView
+        DrawingView drawingView = mainActivity.drawingView;
+
+        // get undoButton
+        ActionMenuItemView undoButton = mainActivity.findViewById(R.id.bt_undo);
+
+        // get bitmapHistory
+        ArrayList<Bitmap> bitmapHistory = drawingView.bitmapHistory;
+
+        // check if history is empty
+        assert(bitmapHistory.size() == 0);
+
+        // do 50 do steps
+        int max_count = 50;
+
+        // undo Button should be disabled
+        assertFalse(undoButton.isEnabled());
+
+        for(int count = 0; count < max_count; count++)
+        {
+            // make dot
+            onView(withId(R.id.drawing_view)).perform(clickXY(10+count,10+count));
+
+            assertTrue(undoButton.isEnabled());
+
+            // we should not extend the array too much, 15 is our actual max bitmap array value
+            assert(bitmapHistory.size() <= 15);
+        }
+
+        // do 100 undo steps
+        for(int count = 0; count < max_count; count++)
+        {
+            // do something
+            onView(withId(R.id.bt_undo)).perform(click());
+
+            // check button status
+            if(bitmapHistory.size() > 0)
+            {
+                assertTrue(undoButton.isEnabled());
+            } else {
+                assertFalse(undoButton.isEnabled());
+            }
+        }
+
+        assert(bitmapHistory.size() == 0);
 
     }
 
