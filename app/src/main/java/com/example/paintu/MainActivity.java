@@ -40,7 +40,7 @@ import java.util.Date;
 import java.io.IOException;
 
 
-public class MainActivity extends AppCompatActivity implements DrawingView.DrawingInProgress {
+public class MainActivity extends AppCompatActivity implements DrawingView.DrawingInProgress, DrawingView.UndoBtnAvailable {
     protected static final int GALLERY_PICTURE = 1;
     protected static final int CAMERA_PICTURE = 2;
 
@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
     TextView colorOrange;
     TextView colorPurple;
 
+    MenuItem toolUndo;
+
     TextView stroke;
     LinearLayout strokeOptions;
     LinearLayout colorRow;
@@ -92,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
 
         drawingView = (DrawingView) findViewById(R.id.drawing_view);
         drawingView.setListener(this);
+        drawingView.setBtnListner(this);
 
         toolPointLayout = (LinearLayout) findViewById(R.id.tool_point);
         toolLineLayout = (LinearLayout) findViewById(R.id.tool_line);
@@ -357,11 +360,25 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         });
     }
 
+    public void enableUndoBt()
+    {
+        toolUndo.setEnabled(true);
+    }
+
+    public void disableUndoBt()
+    {
+        toolUndo.setEnabled(false);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        //https://stackoverflow.com/questions/16500415/findviewbyid-for-menuitem-returns-null
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+
+        toolUndo = menu.findItem(R.id.bt_undo);
+        disableUndoBt();
+
         return true;
     }
 
@@ -387,6 +404,19 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             }
             return true;
         }
+        else if(id == R.id.bt_undo){
+            this.drawingView.undo();
+            if(drawingView.isUndoPossible())
+            {
+                enableUndoBt();
+            }
+            else
+            {
+                disableUndoBt();
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
         else if(id == R.id.save_btn){
 
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)

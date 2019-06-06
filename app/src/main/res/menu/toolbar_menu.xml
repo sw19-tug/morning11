@@ -5,6 +5,12 @@
     tools:context=".MainActivity">
 
     <item
+        android:id="@+id/bt_undo"
+        android:title="@string/undo"
+        android:icon="@drawable/ic_undo_black_24dp"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/bt_tools_chooser"
         android:title="@string/tool"
         android:icon="@drawable/ic_style_black_24dp"
