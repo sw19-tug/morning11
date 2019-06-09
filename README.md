@@ -1,5 +1,3 @@
-# morning11
-
 ## **PAINTU**
 
 An android drawing app created by desperate students to push theirs and your
@@ -15,7 +13,8 @@ Draw an image on an empty canvas using
 or erase a mistake or unwanted garbage with an
 * Eraser
 
-![PAINTU tool menu image](https://github.com/sw19-tug/morning11/raw/develop/images/toolSelection.jpg)
+<img src="img/toolSelection.jpg" alt="PAINTU tool menu" width="30%" height="30%">
+
 
 You can also import images from your local gallery (please selected them wisely)
 or snap a quick picture and draw a small doodle on it. 
