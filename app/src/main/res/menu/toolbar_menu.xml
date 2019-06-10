@@ -22,4 +22,10 @@
         android:icon="@drawable/ic_save_black_24dp"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/clear_btn"
+        android:title="@string/clear"
+        android:icon="@drawable/ic_clear_black_24dp"
+        app:showAsAction="never"/>
+
 </menu>

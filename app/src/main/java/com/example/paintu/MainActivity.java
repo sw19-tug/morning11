@@ -452,6 +452,9 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             }
 
         }
+        else if (id == R.id.clear_btn){
+            this.clearScreen();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -764,6 +767,25 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
+    }
+
+    public void clearScreen() {
+        AlertDialog.Builder clearScreenDialog = new AlertDialog.Builder(this);
+        clearScreenDialog.setTitle("Clear");
+        clearScreenDialog.setMessage("Clear the screen?");
+        clearScreenDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                drawingView.clearScreen();
+            }
+
+        });
+        clearScreenDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        clearScreenDialog.show();
     }
 }
 
