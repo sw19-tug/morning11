@@ -391,5 +391,19 @@ public class MainActivityEspressoTest {
                 },
                 Press.FINGER);
     }
+    @Test
+    public void ClearScreenTest(){
+
+        MainActivity mainActivity = mainActivityTestRule.getActivity();
+        DrawingView drawingView = mainActivity.drawingView;
+        Bitmap bitmap = Bitmap.createBitmap(drawingView.bitmap);
+        Bitmap emptyBitmap = Bitmap.createBitmap(drawingView.bitmap);
+
+        onView(withId(R.id.drawing_view)).perform(clickXY(100,100));
+
+        drawingView.clearScreen();
+
+        assertTrue(drawingView.bitmap.sameAs(emptyBitmap));
+    }
 }
 
