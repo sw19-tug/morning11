@@ -280,12 +280,14 @@ public class MainActivityEspressoTest {
 
     @Test
     public void testSaveButtonDisplayed() {
-        onView(withId(R.id.save_btn)).check(matches(isDisplayed()));
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        onView(withText("Save")).check(matches(isDisplayed()));
     }
 
     @Test
     public void testSaveButtonClicked() {
-        onView(withId(R.id.save_btn)).perform(click());
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        onView(withText("Save")).perform(click());
         onView(withText("Save drawing to device Gallery?")).check(matches(isDisplayed()));
     }
 
