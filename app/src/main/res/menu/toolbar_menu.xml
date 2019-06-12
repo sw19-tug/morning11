@@ -23,6 +23,11 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/share_btn"
+        android:title="@string/share"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/settings_button"
         android:title="@string/settings"
         app:showAsAction="never"/>
@@ -32,5 +37,7 @@
         android:title="@string/clear"
         android:icon="@drawable/ic_clear_black_24dp"
         app:showAsAction="never"/>
+
+
 
 </menu>

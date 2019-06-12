@@ -552,6 +552,16 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
                startActivity(intent);
                return true;
         }
+        else if(id == R.id.share_btn)
+        {
+            String bitmapPath = MediaStore.Images.Media.insertImage(getContentResolver(), drawingView.getBitmap(),"title", null);
+            Uri bitmapUri = Uri.parse(bitmapPath);
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("image/png");
+            intent.putExtra(Intent.EXTRA_STREAM, bitmapUri );
+            startActivity(Intent.createChooser(intent , "Share"));
+
+        }
 
         return super.onOptionsItemSelected(item);
     }
