@@ -20,4 +20,6 @@
     <string name="clear">Clear screen</string>
     <string name="settings">Settings</string>
     <string name="colorblind_mode">Colorblind Mode</string>
+    <string name="share">Share</string>
+
 </resources>
