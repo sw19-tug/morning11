@@ -4,19 +4,20 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,13 +35,13 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.io.IOException;
 
 
-public class MainActivity extends AppCompatActivity implements DrawingView.DrawingInProgress {
+public class MainActivity extends AppCompatActivity implements DrawingView.DrawingInProgress, DrawingView.UndoBtnAvailable {
     protected static final int GALLERY_PICTURE = 1;
     protected static final int CAMERA_PICTURE = 2;
 
@@ -72,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
     TextView colorOrange;
     TextView colorPurple;
 
+    MenuItem toolUndo;
+
     TextView stroke;
     LinearLayout strokeOptions;
     LinearLayout colorRow;
@@ -93,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
 
         drawingView = (DrawingView) findViewById(R.id.drawing_view);
         drawingView.setListener(this);
+        drawingView.setBtnListner(this);
 
         toolPointLayout = (LinearLayout) findViewById(R.id.tool_point);
         toolLineLayout = (LinearLayout) findViewById(R.id.tool_line);
@@ -379,11 +383,25 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         });
     }
 
+    public void enableUndoBt()
+    {
+        toolUndo.setEnabled(true);
+    }
+
+    public void disableUndoBt()
+    {
+        toolUndo.setEnabled(false);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        //https://stackoverflow.com/questions/16500415/findviewbyid-for-menuitem-returns-null
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+
+        toolUndo = menu.findItem(R.id.bt_undo);
+        disableUndoBt();
+
         return true;
     }
 
@@ -409,6 +427,19 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             }
             return true;
         }
+        else if(id == R.id.bt_undo){
+            this.drawingView.undo();
+            if(drawingView.isUndoPossible())
+            {
+                enableUndoBt();
+            }
+            else
+            {
+                disableUndoBt();
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
         else if(id == R.id.save_btn){
 
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
@@ -443,6 +474,9 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
                 }
             }
 
+        }
+        else if (id == R.id.clear_btn){
+            this.clearScreen();
         }
 
         return super.onOptionsItemSelected(item);
@@ -630,6 +664,13 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
                     fOut.flush();
                     fOut.close();
 
+                    MediaScannerConnection.scanFile(getApplicationContext(), new String[] { file.getPath() }, null,
+                            new MediaScannerConnection.OnScanCompletedListener() {
+                                @Override
+                                public void onScanCompleted(String path, Uri uri) {
+                                    Log.i("SAVING", "Scanned " + path);
+                                }
+                            });
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -756,6 +797,25 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
+    }
+
+    public void clearScreen() {
+        AlertDialog.Builder clearScreenDialog = new AlertDialog.Builder(this);
+        clearScreenDialog.setTitle("Clear");
+        clearScreenDialog.setMessage("Clear the screen?");
+        clearScreenDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                drawingView.clearScreen();
+            }
+
+        });
+        clearScreenDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        clearScreenDialog.show();
     }
 }
 
