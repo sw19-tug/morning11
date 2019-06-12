@@ -431,5 +431,11 @@ public class MainActivityEspressoTest {
         intended(toPackage(SettingsActivity.class.getPackage().getName()));
     }
 
+    @Test
+    public void testClickShareButton() {
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        onView(withText("Share")).perform(click());
+    }
+
 }
 
