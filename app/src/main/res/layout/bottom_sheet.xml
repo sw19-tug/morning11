@@ -93,8 +93,7 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:visibility="gone">
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="0dp"
@@ -144,8 +143,7 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:visibility="gone">
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="0dp"
@@ -170,8 +168,7 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:visibility="gone">
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="0dp"

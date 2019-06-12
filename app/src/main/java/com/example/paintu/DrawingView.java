@@ -281,4 +281,8 @@ public class DrawingView extends View {
         System.out.println(1);
     }
 
+    public void clearScreen(){
+        canvas.drawColor(backgroundColor);
+    }
+
 }
