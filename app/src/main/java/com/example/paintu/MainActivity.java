@@ -4,15 +4,19 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v14.preference.PreferenceFragment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -36,6 +40,9 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements DrawingView.DrawingInProgress {
 
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 112;
+
+    public static Boolean switchPref;
+    public static SharedPreferences sharedPref;
 
     LinearLayout linearBottomSheet;
     BottomSheetBehavior sheetBehavior;
@@ -103,6 +110,17 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
 
         sheetBehavior = BottomSheetBehavior.from(linearBottomSheet);
 
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        final MediaPlayer blackSound = MediaPlayer.create(this, R.raw.black);
+        final MediaPlayer whiteSound = MediaPlayer.create(this, R.raw.white);
+        final MediaPlayer redSound = MediaPlayer.create(this, R.raw.red);
+        final MediaPlayer greenSound = MediaPlayer.create(this, R.raw.green);
+        final MediaPlayer blueSound = MediaPlayer.create(this, R.raw.blue);
+        final MediaPlayer yellowSound = MediaPlayer.create(this, R.raw.yellow);
+        final MediaPlayer orangeSound = MediaPlayer.create(this, R.raw.orange);
+        final MediaPlayer pinkSound = MediaPlayer.create(this, R.raw.pink);
 
         toolPointLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,6 +183,12 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             public void onClick(View v) {
                 drawingView.setPaintColor(getResources().getColor(R.color.option_color_black));
                 inflateColorButton(getResources().getColor(R.color.option_color_black));
+
+                switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_COLORBLIND_MODE_SWITCH, false);
+
+                if(switchPref) {
+                    blackSound.start();
+                }
             }
         });
 
@@ -173,6 +197,12 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             public void onClick(View v) {
                 drawingView.setPaintColor(getResources().getColor(R.color.option_color_white));
                 inflateColorButton(getResources().getColor(R.color.option_color_white));
+
+                switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_COLORBLIND_MODE_SWITCH, false);
+
+                if(switchPref) {
+                    whiteSound.start();
+                }
             }
         });
 
@@ -181,6 +211,12 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             public void onClick(View v) {
                 drawingView.setPaintColor(getResources().getColor(R.color.option_color_red));
                 inflateColorButton(getResources().getColor(R.color.option_color_red));
+
+                switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_COLORBLIND_MODE_SWITCH, false);
+
+                if(switchPref) {
+                    redSound.start();
+                }
             }
         });
 
@@ -189,6 +225,12 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             public void onClick(View v) {
                 drawingView.setPaintColor(getResources().getColor(R.color.option_color_green));
                 inflateColorButton(getResources().getColor(R.color.option_color_green));
+
+                switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_COLORBLIND_MODE_SWITCH, false);
+
+                if(switchPref) {
+                    greenSound.start();
+                }
             }
         });
 
@@ -197,6 +239,12 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             public void onClick(View v) {
                 drawingView.setPaintColor(getResources().getColor(R.color.option_color_blue));
                 inflateColorButton(getResources().getColor(R.color.option_color_blue));
+
+                switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_COLORBLIND_MODE_SWITCH, false);
+
+                if(switchPref) {
+                    blueSound.start();
+                }
             }
         });
 
@@ -205,6 +253,12 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             public void onClick(View v) {
                 drawingView.setPaintColor(getResources().getColor(R.color.option_color_yellow));
                 inflateColorButton(getResources().getColor(R.color.option_color_yellow));
+
+                switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_COLORBLIND_MODE_SWITCH, false);
+
+                if(switchPref) {
+                    yellowSound.start();
+                }
             }
         });
 
@@ -213,6 +267,12 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             public void onClick(View v) {
                 drawingView.setPaintColor(getResources().getColor(R.color.option_color_orange));
                 inflateColorButton(getResources().getColor(R.color.option_color_orange));
+
+                switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_COLORBLIND_MODE_SWITCH, false);
+
+                if(switchPref) {
+                    orangeSound.start();
+                }
             }
         });
 
@@ -221,6 +281,12 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             public void onClick(View v) {
                 drawingView.setPaintColor(getResources().getColor(R.color.option_color_purple));
                 inflateColorButton(getResources().getColor(R.color.option_color_purple));
+
+                switchPref = sharedPref.getBoolean(SettingsActivity.KEY_PREF_COLORBLIND_MODE_SWITCH, false);
+
+                if(switchPref) {
+                    pinkSound.start();
+                }
             }
         });
 
@@ -313,9 +379,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
            if (id == R.id.settings_button) {
 
                Intent intent = new Intent(this, SettingsActivity.class);
-
                startActivity(intent);
-
                return true;
     }
 
@@ -536,6 +600,10 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             }
         });
         saveDialog.show();
+    }
+
+    public static SharedPreferences getSharedPref() {
+        return sharedPref;
     }
 }
 
