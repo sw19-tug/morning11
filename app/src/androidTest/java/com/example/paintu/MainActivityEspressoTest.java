@@ -284,6 +284,11 @@ public class MainActivityEspressoTest {
     }
 
     @Test
+    public void testFilters() {
+        onView(withId(R.id.bt_tools_chooser)).perform(click());
+        onView(withId(R.id.tool_filters)).check(matches(isDisplayed()));
+    }
+
     public void testUndoButtonClicked() {
         MainActivity mainActivity = mainActivityTestRule.getActivity();
         DrawingView drawingView = mainActivity.drawingView;

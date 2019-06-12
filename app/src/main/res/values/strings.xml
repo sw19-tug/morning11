@@ -9,6 +9,13 @@
     <string name="tool_circle">Circle</string>
     <string name="tool_rectangle">Rectangle</string>
     <string name="save">Save</string>
+    <string name="tool_filters">Filters</string>
+    <string name="pick_filter">Pick a Filter</string>
+    <string-array name="filters_names">
+        <item>Black and White</item>
+        <item>Deep fry</item>
+        <item>vintage</item>
+    </string-array>
     <string name="undo">Undo</string>>
     <string name="clear">Clear screen</string>
 </resources>
