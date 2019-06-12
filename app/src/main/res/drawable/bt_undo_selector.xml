@@ -4,9 +4,9 @@
 
     <item
         android:state_enabled="true"
-        android:icon="@drawable/ic_undo_black_24dp"/>
+        android:drawable="@drawable/ic_undo_black_24dp"/>
 
     <item
         android:state_enabled="false"
-        android:icon="@drawable/ic_undo_grey_24dp"/>
+        android:drawable="@drawable/ic_undo_grey_24dp"/>
 </selector>

@@ -7,7 +7,7 @@
     <item
         android:id="@+id/bt_undo"
         android:title="@string/undo"
-        android:icon="@drawable/ic_undo_black_24dp"
+        android:icon="@drawable/bt_undo_selector"
         app:showAsAction="always"/>
 
     <item
