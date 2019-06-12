@@ -16,6 +16,11 @@ import android.support.test.espresso.action.GeneralClickAction;
 import android.support.test.espresso.action.Press;
 import android.support.test.espresso.action.Tap;
 import android.support.test.espresso.intent.Intents;
+import android.app.AlertDialog;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -40,6 +45,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
@@ -59,7 +65,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityEspressoTest {
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public IntentsTestRule<MainActivity> mainActivityTestRule = new IntentsTestRule<>(MainActivity.class);
 
     @Test
     public void testButtonVisible() {
@@ -410,5 +416,18 @@ public class MainActivityEspressoTest {
 
         assertTrue(drawingView.bitmap.sameAs(emptyBitmap));
     }
+    public void testClickSettingsButton() {
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        onView(withText("Settings")).perform(click());
+    }
+
+
+    @Test
+    public void testOpeningSettingsActivity(){
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+        onView(withText("Settings")).perform(click());
+        intended(toPackage(SettingsActivity.class.getPackage().getName()));
+    }
+
 }
 

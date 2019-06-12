@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/apk/tools"
+    xmlns:tools1="http://schemas.android.com/tools"
     package="com.example.paintu">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
 
     <application
         android:allowBackup="true"
@@ -14,8 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:appComponentFactory">
-        <activity android:name=".MainActivity"
+        tools:replace="android:appComponentFactory"
+        tools1:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".SettingsActivity"
+            android:label="Settings">
+        </activity>
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

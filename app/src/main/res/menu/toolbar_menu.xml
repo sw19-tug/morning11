@@ -14,13 +14,18 @@
         android:id="@+id/bt_tools_chooser"
         android:title="@string/tool"
         android:icon="@drawable/ic_style_black_24dp"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/save_btn"
         android:title="@string/save"
         android:icon="@drawable/ic_save_black_24dp"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/settings_button"
+        android:title="@string/settings"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/clear_btn"
