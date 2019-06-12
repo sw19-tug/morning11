@@ -4,19 +4,20 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,10 +35,10 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity implements DrawingView.DrawingInProgress, DrawingView.UndoBtnAvailable {
@@ -641,6 +642,13 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
                     fOut.flush();
                     fOut.close();
 
+                    MediaScannerConnection.scanFile(getApplicationContext(), new String[] { file.getPath() }, null,
+                            new MediaScannerConnection.OnScanCompletedListener() {
+                                @Override
+                                public void onScanCompleted(String path, Uri uri) {
+                                    Log.i("SAVING", "Scanned " + path);
+                                }
+                            });
 
                 } catch (Exception e) {
                     e.printStackTrace();
