@@ -421,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
             public void onClick(View v) {
                 //dragDone.hide();
                 dragDone.setVisibility(View.GONE);
-                drawingView.finalizeBitmap();
+                drawingView.turnDragModeOff();
                 drawingView.setTool(lastUsedTool);
                 strokeOptions.setVisibility(View.VISIBLE);
                 colorRow.setVisibility(View.VISIBLE);
@@ -844,14 +844,16 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
         if (bitmap_full != null && actionCallOk == true) {
             drawingView.setDrawBitmap(bitmap_full);
             sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            drawingView.turnDragModeOn();
             drawingView.invalidate();
-
         } else {
             bitmap_full = null;
             dragDone.setVisibility(View.GONE);
+            drawingView.turnDragModeOff();
             drawingView.setTool(lastUsedTool);
             strokeOptions.setVisibility(View.VISIBLE);
             colorRow.setVisibility(View.VISIBLE);
+            drawingView.invalidate();
             Toast.makeText(this, "Image not loaded.", Toast.LENGTH_LONG).show();
         }
 
