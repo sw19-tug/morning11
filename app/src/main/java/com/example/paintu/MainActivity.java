@@ -842,6 +842,7 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
 
         /* draw resized image */
         if (bitmap_full != null && actionCallOk == true) {
+            drawingView.saveUndoPoint();
             drawingView.setDrawBitmap(bitmap_full);
             sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             drawingView.invalidate();
