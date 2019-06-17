@@ -136,17 +136,7 @@ public class DrawingView extends View {
         // saves the bitmap in the state BEFORE you actually draw sth to it :)
         if(event.getAction() == MotionEvent.ACTION_DOWN)
         {
-            if(bitmapHistory.size() < 15)
-            {
-                bitmapHistory.add(Bitmap.createBitmap(bitmap));
-                btnListner.enableUndoBt();
-            }
-            else
-            {
-                bitmapHistory.remove(0);
-                bitmapHistory.add(Bitmap.createBitmap(bitmap));
-                btnListner.enableUndoBt();
-            }
+            saveUndoPoint();
         }
 
         if(tool == TOOL_POINT)
@@ -226,6 +216,7 @@ public class DrawingView extends View {
     }
 
     public void applyFilter(int which){
+        saveUndoPoint();
         switch (which){
             case 0:
                 blackAndWhiteFilter.applyFilter();
@@ -285,6 +276,21 @@ public class DrawingView extends View {
             return false;
     }
 
+    public void saveUndoPoint()
+    {
+        if(bitmapHistory.size() < 15)
+        {
+            this.bitmapHistory.add(Bitmap.createBitmap(bitmap));
+            this.btnListner.enableUndoBt();
+        }
+        else
+        {
+            this.bitmapHistory.remove(0);
+            this.bitmapHistory.add(Bitmap.createBitmap(bitmap));
+            this.btnListner.enableUndoBt();
+        }
+    }
+
     public void undo() {
         // for debug session print out the size
         //
@@ -303,6 +309,7 @@ public class DrawingView extends View {
     }
 
     public void clearScreen(){
+        saveUndoPoint();
         canvas.drawColor(backgroundColor);
     }
 
