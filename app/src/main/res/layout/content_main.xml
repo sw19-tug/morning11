@@ -34,7 +34,7 @@
             android:tint="#00FFFFFF"
             android:visibility="gone"
             app:backgroundTint="#00FFFFFF"
-            app:srcCompat="@android:drawable/ic_menu_save" />
+            app:srcCompat="@drawable/ic_check_black_24dp" />
 
         <LinearLayout
             android:id="@+id/stroke_options"
