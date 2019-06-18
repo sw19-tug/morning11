@@ -460,6 +460,14 @@ public class MainActivity extends AppCompatActivity implements DrawingView.Drawi
     }
 
     @Override
+    public void onBackPressed() {
+        if(sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        else
+            super.onBackPressed();
+    }
+    
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //https://stackoverflow.com/questions/16500415/findviewbyid-for-menuitem-returns-null
