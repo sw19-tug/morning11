@@ -62,7 +62,8 @@ public class DrawingView extends View {
     DrawBitmap.BitmapOwn ownBitmap;
     private int width = 0;
     private int height = 0;
-    private boolean finalizeBitmap = false;
+
+    private boolean dragModeOn = false;
 
 
 
@@ -84,24 +85,20 @@ public class DrawingView extends View {
         eraser = new Eraser(canvas, eraserPaint, backgroundColor);
         drawRectangle = new DrawRectangle(canvas, drawPaint);
         bucketFill = new BucketFill(bitmap, drawPaint);
-        blackAndWhiteFilter = new BlackAndWhiteFilter(canvas, bitmap);
-        vintageFilter = new VintageFilter(canvas, bitmap);
-        deepFryFilter = new DeepFryFilter(canvas, bitmap);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if(bitmap == null)
-            return;
+        //if(canvas != this.canvas)
+        //   this.canvas = canvas;
 
-        canvas.drawBitmap(bitmap, 0, 0, canvasPaint);
+        if(bitmap != null)
+            canvas.drawBitmap(bitmap, 0, 0, canvasPaint);
 
-        if (line != null && line.getEndX() >= 0 && line.getEndY() >= 0) {
-            canvas.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(),
-                    drawPaint);
-        }
+        if (line != null && line.getEndX() >= 0 && line.getEndY() >= 0)
+            canvas.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), drawPaint);
 
         if (rectangle != null)
             canvas.drawRect(rectangle.getLeft(), rectangle.getTop(), rectangle.getRight(), rectangle.getBottom(), drawPaint);
@@ -109,24 +106,13 @@ public class DrawingView extends View {
         if(circle != null)
             canvas.drawCircle(circle.getCenterX(), circle.getCenterY(), circle.getRadius(), drawPaint);
 
-
-        if (!finalizeBitmap) {
+        if (dragModeOn) {
             canvas.save();
             if (this.ownBitmap != null) {
                 canvas.setMatrix(drawBitmap.getMatrix());  // get transformation matrix
                 canvas.drawBitmap(this.ownBitmap.getBitmap(), this.ownBitmap.getLeft(), this.ownBitmap.getTop(), drawPaint);
             }
             canvas.restore();
-        } else {
-            finalizeBitmap = false;
-            if (this.ownBitmap != null) {
-                // save origin!
-                this.canvas.setMatrix(drawBitmap.getMatrix());  // get transformation matrix
-                this.canvas.drawBitmap(this.ownBitmap.getBitmap(), this.ownBitmap.getLeft(), this.ownBitmap.getTop(), drawPaint);
-                this.canvas.setMatrix(new Matrix());
-                canvas = null;
-                this.ownBitmap = null;
-            }
         }
     }
 
@@ -164,8 +150,6 @@ public class DrawingView extends View {
             listener.onDrawingEnd();
 
         this.invalidate();
-
-
 
         return true;
     }
@@ -217,17 +201,25 @@ public class DrawingView extends View {
 
     public void applyFilter(int which){
         saveUndoPoint();
+
         switch (which){
             case 0:
+                blackAndWhiteFilter = new BlackAndWhiteFilter(this.canvas, this.bitmap);
                 blackAndWhiteFilter.applyFilter();
+                this.invalidate();
                 break;
             case 1:
+                deepFryFilter = new DeepFryFilter(this.canvas, this.bitmap);
                 deepFryFilter.applyFilter();
+                this.invalidate();
                 break;
             case 2:
+                vintageFilter = new VintageFilter(this.canvas, this.bitmap);
                 vintageFilter.applyFilter();
+                this.invalidate();
                 break;
         }
+
     }
 
     public void setDrawPaint(Paint drawPaint) {
@@ -246,12 +238,26 @@ public class DrawingView extends View {
         return bitmap;
     }
 
-    public void finalizeBitmap() {
-        finalizeBitmap = true;
+    public void turnDragModeOff()
+    {
+        dragModeOn = false;
+
+        if (this.ownBitmap != null) {
+            // save origin!
+            this.canvas.setMatrix(drawBitmap.getMatrix());  // get transformation matrix
+            this.canvas.drawBitmap(this.ownBitmap.getBitmap(), this.ownBitmap.getLeft(), this.ownBitmap.getTop(), drawPaint);
+            this.canvas.setMatrix(new Matrix());
+            this.ownBitmap = null;
+        }
     }
 
-    public Boolean isBitmapFinalized() {
-        return finalizeBitmap;
+    public void turnDragModeOn()
+    {
+        dragModeOn = true;
+    }
+
+    public Boolean isDragModeOn() {
+        return dragModeOn;
     }
 
     public void setDrawBitmap(Bitmap bitmap) {
