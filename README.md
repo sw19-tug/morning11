@@ -33,3 +33,7 @@ Even unique filters can be applied ! :)
 Drawing showcase using the path tool
 
 <img src="img/drawingInAction.jpg" alt="PAINTU tool menu" width="30%" height="30%">
+
+Save your drawings:
+
+<img src="img/saving.jpg" alt="PAINTU tool menu" width="30%" height="30%">
