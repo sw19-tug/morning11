@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.preference.SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:title="@string/colorblind_mode"
+        android:key="colorblind_mode_switch"
+        android:summary="Turn the Colorblind Mode on or off" />
+
+</PreferenceScreen>

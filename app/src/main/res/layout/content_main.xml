@@ -24,6 +24,18 @@
         android:gravity="center">
 
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/button_dragdone"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:backgroundTintMode="add"
+            android:clickable="true"
+            android:tint="#00FFFFFF"
+            android:visibility="gone"
+            app:backgroundTint="#00FFFFFF"
+            app:srcCompat="@drawable/ic_check_black_24dp" />
+
         <LinearLayout
             android:id="@+id/stroke_options"
             android:layout_width="match_parent"
@@ -38,136 +50,137 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/color_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="center">
 
                 <TextView
                     android:id="@+id/stroke"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textAlignment="center"
                     android:text="10"
-                    android:textColor="@android:color/black"/>
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/colors"
                 android:layout_width="0dp"
-                android:layout_weight="7"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:layout_weight="7"
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center">
 
                     <TextView
                         android:id="@+id/color_black"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:background="@drawable/circle_black"/>
+                        android:background="@drawable/circle_black" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center">
 
                     <TextView
                         android:id="@+id/color_white"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/circle_white"/>
+                        android:background="@drawable/circle_white" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center">
 
                     <TextView
                         android:id="@+id/color_red"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/circle_red"/>
+                        android:background="@drawable/circle_red" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center">
 
                     <TextView
                         android:id="@+id/color_green"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/circle_green"/>
+                        android:background="@drawable/circle_green" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center">
 
                     <TextView
                         android:id="@+id/color_blue"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/circle_blue"/>
+                        android:background="@drawable/circle_blue" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center">
 
                     <TextView
                         android:id="@+id/color_yellow"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/circle_yellow"/>
+                        android:background="@drawable/circle_yellow" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center">
 
                     <TextView
                         android:id="@+id/color_orange"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/circle_orange"/>
+                        android:background="@drawable/circle_orange" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center">
 
                     <TextView
                         android:id="@+id/color_purple"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/circle_purple"/>
+                        android:background="@drawable/circle_purple" />
                 </LinearLayout>
 
 
